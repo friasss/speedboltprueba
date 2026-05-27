@@ -1,14 +1,4 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Speed Bolt — STEM Racing Dominican Republic</title>
-<link rel="icon" href="assets/speedbolt-logo.png" type="image/png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Bebas+Neue&family=League+Spartan:wght@400;600;700;800;900&family=Manrope:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<style>
+
 /* ============================================================
    SPEED BOLT — DESIGN TOKENS
    ============================================================ */
@@ -457,7 +447,7 @@ body {
 .hero-title {
   font-family: var(--font-display);
   font-style: italic;
-  font-size: clamp(48px, 7vw, 112px);
+  font-size: clamp(46px, 6.4vw, 104px);
   line-height: 0.88;
   letter-spacing: 0;
   color: var(--cream);
@@ -475,10 +465,10 @@ body {
 
 .hero-description {
   font-family: var(--font-body);
-  font-size: clamp(15px, 1.3vw, 18px);
-  line-height: 1.6;
+  font-size: clamp(15px, 1.18vw, 17px);
+  line-height: 1.68;
   color: var(--gray-3);
-  max-width: 480px;
+  max-width: 520px;
   margin-bottom: 36px;
   font-weight: 300;
 }
@@ -506,7 +496,7 @@ body {
   gap: 12px;
   clip-path: polygon(6% 0, 100% 0, 94% 100%, 0 100%);
   padding: 16px 36px;
-  transition: all 0.4s var(--ease-out-expo);
+  transition: transform 0.28s var(--ease-out-expo), color 0.28s var(--ease-out-expo), background 0.28s var(--ease-out-expo);
   position: relative;
   overflow: hidden;
 }
@@ -521,6 +511,7 @@ body {
 }
 .btn-primary:hover::before { transform: translateX(0); }
 .btn-primary span, .btn-primary svg { position: relative; z-index: 1; }
+.btn-primary:active { transform: scale(0.98); }
 
 .btn-secondary {
   background: transparent;
@@ -537,11 +528,25 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  transition: all 0.3s var(--ease-out-quart);
+  transition: background 0.24s var(--ease-out-quart), color 0.24s var(--ease-out-quart), border-color 0.24s var(--ease-out-quart), transform 0.2s var(--ease-out-quart);
 }
 .btn-secondary:hover {
   background: var(--cream);
   color: var(--black);
+}
+.btn-secondary:active { transform: scale(0.985); }
+
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible,
+.section-link:focus-visible,
+.cta-btn:focus-visible,
+.nav-links a:focus-visible,
+.nav-cta:focus-visible,
+.brand-card:focus-visible,
+.post-card:focus-visible,
+.btn-icon:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 4px;
 }
 
 /* HERO VISUAL — F1 CAR SVG / Visual Element */
@@ -808,14 +813,14 @@ body {
    ============================================================ */
 section {
   position: relative;
-  padding: 120px max(40px, 8vw);
+  padding: 108px max(40px, 8vw);
 }
 @media (max-width: 768px) {
-  section { padding: 80px 20px; }
+  section { padding: 72px 20px; }
 }
 
 .section-header {
-  margin-bottom: 80px;
+  margin-bottom: 68px;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -842,7 +847,7 @@ section {
 .section-title {
   font-family: var(--font-display);
   font-style: italic;
-  font-size: clamp(40px, 6vw, 88px);
+  font-size: clamp(38px, 5.4vw, 80px);
   line-height: 0.9;
   letter-spacing: 0;
   color: var(--cream);
@@ -863,7 +868,7 @@ section {
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: background 0.24s var(--ease-out-quart), border-color 0.24s var(--ease-out-quart), color 0.24s var(--ease-out-quart), transform 0.2s var(--ease-out-quart);
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -872,6 +877,7 @@ section {
   background: var(--orange);
   border-color: var(--orange);
   color: var(--black);
+  transform: translateY(-1px);
 }
 
 /* ============================================================
@@ -894,8 +900,8 @@ section {
 }
 
 .about-text p {
-  font-size: 18px;
-  line-height: 1.7;
+  font-size: 17px;
+  line-height: 1.76;
   color: var(--cream);
   margin-bottom: 24px;
   font-weight: 300;
@@ -915,7 +921,7 @@ section {
 }
 .stat {
   background: var(--black);
-  padding: 32px 24px;
+  padding: 28px 22px;
   position: relative;
 }
 .stat .num {
@@ -1156,10 +1162,10 @@ section {
 
 .impact-card {
   background: var(--black-card);
-  padding: 40px 32px;
+  padding: 36px 28px;
   position: relative;
   border: 1px solid var(--gray-1);
-  transition: all 0.5s var(--ease-out-expo);
+  transition: transform 0.35s var(--ease-out-expo), border-color 0.35s var(--ease-out-expo), box-shadow 0.35s var(--ease-out-expo);
   overflow: hidden;
   cursor: pointer;
 }
@@ -1185,6 +1191,7 @@ section {
 .impact-card:hover {
   border-color: var(--orange);
   transform: translateY(-6px);
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.22);
 }
 .impact-card:hover::before { transform: scaleX(1); }
 
@@ -1363,13 +1370,14 @@ section {
   border: 1px solid var(--gray-1);
   overflow: hidden;
   cursor: pointer;
-  transition: all 0.4s var(--ease-out-expo);
+  transition: transform 0.32s var(--ease-out-expo), border-color 0.32s var(--ease-out-expo), box-shadow 0.32s var(--ease-out-expo);
   display: flex;
   flex-direction: column;
 }
 .post-card:hover {
   border-color: var(--orange);
   transform: translateY(-6px);
+  box-shadow: 0 20px 36px rgba(10, 10, 10, 0.12);
 }
 .post-card:hover .post-cover img,
 .post-card:hover .post-cover-fallback {
@@ -1418,7 +1426,7 @@ section {
 }
 
 .post-body {
-  padding: 28px;
+  padding: 24px;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -1736,13 +1744,29 @@ section {
   letter-spacing: 0;
 }
 
+.cta-kicker {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 18px;
+  padding: 8px 12px;
+  border: 1px solid rgba(10,10,10,0.16);
+  background: rgba(255,255,255,0.22);
+  color: rgba(10,10,10,0.72);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
 .cta-content {
   position: relative;
   z-index: 2;
   display: grid;
   grid-template-columns: 2fr 1fr;
-  gap: 60px;
+  gap: 48px;
   align-items: center;
+  max-width: 1240px;
+  margin: 0 auto;
 }
 @media (max-width: 900px) {
   .cta-content { grid-template-columns: 1fr; }
@@ -1750,7 +1774,7 @@ section {
 .cta-title {
   font-family: var(--font-display);
   font-style: italic;
-  font-size: clamp(40px, 6vw, 88px);
+  font-size: clamp(38px, 5.5vw, 78px);
   line-height: 0.9;
   letter-spacing: 0;
   text-transform: uppercase;
@@ -1760,11 +1784,12 @@ section {
 .cta-subtitle {
   font-family: var(--font-sub);
   font-weight: 600;
-  font-size: 16px;
+  font-size: 15px;
   letter-spacing: 0.04em;
   margin-top: 24px;
   color: var(--black);
-  max-width: 400px;
+  max-width: 430px;
+  line-height: 1.65;
   text-transform: uppercase;
 }
 .cta-button-wrap {
@@ -1772,6 +1797,40 @@ section {
   flex-direction: column;
   gap: 16px;
   align-items: flex-start;
+}
+.cta-proof {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  max-width: 760px;
+  margin-top: 28px;
+}
+.cta-proof-card {
+  border: 1px solid rgba(10,10,10,0.14);
+  background: rgba(255,255,255,0.16);
+  padding: 16px 18px;
+  min-height: 104px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  backdrop-filter: blur(8px);
+}
+.cta-proof-value {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(24px, 3vw, 40px);
+  color: var(--black);
+  line-height: 0.95;
+  transform: skewX(-6deg);
+}
+.cta-proof-label {
+  font-family: var(--font-sub);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  line-height: 1.55;
+  text-transform: uppercase;
+  color: rgba(10,10,10,0.74);
 }
 .cta-btn {
   background: var(--black);
@@ -1790,11 +1849,30 @@ section {
   gap: 14px;
   clip-path: polygon(6% 0, 100% 0, 94% 100%, 0 100%);
   padding: 22px 44px;
-  transition: all 0.3s var(--ease-out-expo);
+  transition: background 0.24s var(--ease-out-expo), color 0.24s var(--ease-out-expo), transform 0.2s var(--ease-out-expo);
 }
 .cta-btn:hover {
   background: var(--cream);
   color: var(--black);
+  transform: translateY(-1px);
+}
+.cta-btn:active { transform: scale(0.985); }
+.cta-btn-secondary {
+  background: transparent !important;
+  color: var(--black) !important;
+  border: 2px solid var(--black);
+}
+.cta-note {
+  max-width: 360px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(10,10,10,0.72);
+}
+@media (max-width: 900px) {
+  .cta-proof {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ============================================================
@@ -1810,7 +1888,7 @@ footer {
 .footer-top {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 60px;
+  gap: 48px;
   margin-bottom: 60px;
 }
 @media (max-width: 900px) {
@@ -2483,15 +2561,39 @@ footer {
   color: #777;
   font-size: 13px;
   font-family: var(--font-body);
-  max-width: 420px;
+  max-width: 560px;
   line-height: 1.7;
   margin-top: 1rem;
   font-weight: 300;
 }
+.brand-header {
+  align-items: flex-start;
+}
+.brand-header-lead {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  max-width: 360px;
+}
+.brand-lead-chip {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(10,10,10,0.14);
+  color: #3e3e3e;
+  background: rgba(255,255,255,0.72);
+  padding: 10px 14px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  backdrop-filter: blur(10px);
+}
 .brand-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(10,10,10,0.08);
+  background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(246,244,240,0.9));
+  box-shadow: 0 20px 60px rgba(10,10,10,0.06);
 }
 .brand-card {
   background: #0a0a0a;
@@ -2505,15 +2607,22 @@ footer {
   justify-content: center;
   gap: 1.25rem;
   position: relative;
-  transition: box-shadow 0.25s, background 0.2s;
+  transition: box-shadow 0.25s, background 0.2s, transform 0.25s;
   min-height: 200px;
   text-align: center;
   outline: none;
   color: var(--cream);
 }
 .brand-card:last-child { border-right: none; }
-.brand-card:hover { background: #131313; }
+.brand-card:hover { background: #131313; transform: translateY(-2px); }
 .brand-card.active { box-shadow: inset 0 0 0 2px var(--orange); }
+.brand-card-kicker {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(245,241,232,0.42);
+}
 .brand-card-subtitle {
   font-family: var(--font-mono);
   font-size: 8px;
@@ -2698,6 +2807,7 @@ footer {
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.45);
 }
 .brand-panel-top {
   display: flex;
@@ -2972,1576 +3082,968 @@ footer {
 .partners-section .section-eyebrow { color: var(--orange); }
 .partners-row { border-color: rgba(255,255,255,0.08); }
 .partners-row-label { color: rgba(255,255,255,0.4); }
-</style>
-</head>
-<body>
 
-<!-- GRAIN OVERLAY -->
-<div class="grain"></div>
-
-<!-- CUSTOM CURSOR -->
-<div class="cursor-dot" id="cursorDot"></div>
-<div class="cursor-ring" id="cursorRing"></div>
-
-<!-- PRELOADER -->
-<div class="preloader" id="preloader">
-  <div class="preloader-meta">
-    <span>SB · 2026</span>
-    <span>LOADING</span>
-  </div>
-  <img class="preloader-logo-img" src="assets/speedbolt-logo.png" alt="Speed Bolt"/>
-  <div class="preloader-bar"></div>
-  <div class="preloader-meta">
-    <span>STEM RACING</span>
-    <span>DOM. REPUBLIC</span>
-  </div>
-</div>
-
-<!-- ============================================================
-     MAIN SITE
-     ============================================================ -->
-<div id="main-site">
-
-<!-- NAVIGATION -->
-<nav class="nav" id="nav">
-  <a href="#hero" class="nav-logo" data-cursor="hover" aria-label="Speed Bolt">
-    <img src="assets/speedbolt-logo.png" alt="Speed Bolt"/>
-  </a>
-  <ul class="nav-links">
-    <li><a href="#brand" data-cursor="hover">Marca</a></li>
-    <li><a href="#about" data-cursor="hover">Equipo</a></li>
-    <li><a href="#stem" data-cursor="hover">STEM Racing</a></li>
-    <li><a href="#car" data-cursor="hover">El Carro</a></li>
-    <li><a href="#feed" data-cursor="hover">Transmisiones</a></li>
-    <li><a href="#partners" data-cursor="hover">Patrocinadores</a></li>
-    <li><a href="#admin" class="nav-cta" id="navAdminBtn" data-cursor="hover">Admin</a></li>
-  </ul>
-  <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
-<div class="nav-mobile-menu" id="mobileMenu">
-  <a href="#about" data-cursor="hover">Equipo</a>
-  <a href="#stem" data-cursor="hover">STEM Racing</a>
-  <a href="#car" data-cursor="hover">El Carro</a>
-  <a href="#feed" data-cursor="hover">Transmisiones</a>
-  <a href="#partners" data-cursor="hover">Patrocinadores</a>
-  <a href="#admin" data-cursor="hover">Admin</a>
-</div>
-
-<!-- ============================================================
-     HERO SLIDER
-     ============================================================ -->
-<section class="hero" id="hero">
-  <div class="hero-slides">
-
-    <!-- SLIDE 1: SPEED BOLT BRAND -->
-    <div class="hero-slide slide-1 active" data-slide="0">
-      <div class="hero-content">
-        <div class="hero-text-block">
-          <div class="hero-meta">EQUIPO 01 · TEMPORADA 2026</div>
-          <h1 class="hero-title">
-            <span class="accent">SPEED</span><br>
-            <span class="stroke">BOLT</span><br>
-            <span>RACING</span>
-          </h1>
-          <p class="hero-description">
-            No somos solo otro equipo. Somos ingeniería pura, velocidad pensada y diseño obsesivo. Speed Bolt nació en República Dominicana para empujar los límites de lo que un equipo estudiantil puede construir.
-          </p>
-          <div class="hero-actions">
-            <a href="#about" class="btn-primary" data-cursor="hover">
-              <span>Conoce al equipo</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"/></svg>
-            </a>
-            <a href="#car" class="btn-secondary" data-cursor="hover">Ver SpeedBolt-00</a>
-          </div>
-        </div>
-        <div class="hero-visual hero-visual-1">
-          <!-- MYSTERY CAR — SpeedBolt-00 CLASIFICADO -->
-          <div class="mystery-visual">
-            <div class="mystery-box">
-              <div class="mystery-classified">— clasificado —</div>
-              <div class="mystery-model">SpeedBolt-00</div>
-              <div class="mystery-question">? ? ?</div>
-              <div class="mystery-right-lines">
-                <div class="mrl"></div>
-                <div class="mrl"></div>
-                <div class="mrl"></div>
-              </div>
-            </div>
-            <div class="mystery-meta">
-              <div class="mystery-meta-col">FORMA<span>DESCONOCIDA</span></div>
-              <div class="mystery-meta-col">VELOCIDAD<span>CLASIFICADA</span></div>
-              <div class="mystery-meta-col">ESTADO<span>EN DISEÑO</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SLIDE 2: STEM RACING -->
-    <div class="hero-slide slide-2" data-slide="1">
-      <div class="hero-content">
-        <div class="hero-text-block">
-          <div class="hero-meta">COMPETENCIA OFICIAL · DOMINICAN REPUBLIC</div>
-          <h1 class="hero-title">
-            <span class="accent">STEM</span><br>
-            <span class="stroke">RACING</span><br>
-            <span>2026</span>
-          </h1>
-          <p class="hero-description">
-            La competencia internacional de mini-bólidos donde estudiantes de todo el mundo diseñan, construyen y compiten con autos a escala. Speed Bolt representa la cantera dominicana en la próxima generación de ingeniería de motorsport.
-          </p>
-          <div class="hero-actions">
-            <a href="#stem" class="btn-primary" data-cursor="hover">
-              <span>Sobre la competencia</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"/></svg>
-            </a>
-          </div>
-        </div>
-        <div class="hero-visual">
-          <div class="stem-logo">
-            <img src="assets/stemracing-logo.png" alt="STEM Racing Dominican Republic" class="stem-logo-real-hero"/>
-            <div class="stem-logo-tag">DOMINICAN REPUBLIC&trade;</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SLIDE 3: IMPACT -->
-    <div class="hero-slide slide-3" data-slide="2">
-      <div class="hero-content">
-        <div class="hero-text-block">
-          <div class="hero-meta">IMPACTO · GENERACIÓN STEM</div>
-          <h1 class="hero-title">
-            <span>NO ES</span><br>
-            <span class="accent">SOLO</span><br>
-            <span class="stroke">UN AUTO.</span>
-          </h1>
-          <p class="hero-description">
-            Cada milímetro de SpeedBolt-00 representa horas de cálculos, pruebas aerodinámicas y noches sin dormir. Stem Racing no forma pilotos: forma la próxima generación de ingenieros, diseñadores y emprendedores que República Dominicana necesita.
-          </p>
-          <div class="hero-actions">
-            <a href="#impact" class="btn-primary" data-cursor="hover">
-              <span>Nuestro impacto</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"/></svg>
-            </a>
-          </div>
-        </div>
-        <div class="hero-visual">
-          <div class="impact-numbers">
-            <div class="impact-number">
-              <div class="num">12+</div>
-              <div class="label">Países compitiendo</div>
-            </div>
-            <div class="impact-number">
-              <div class="num">40K</div>
-              <div class="label">Estudiantes globales</div>
-            </div>
-            <div class="impact-number">
-              <div class="num model-name">SpeedBolt-00</div>
-              <div class="label">Modelo actual</div>
-            </div>
-            <div class="impact-number">
-              <div class="num">2026</div>
-              <div class="label">Temporada activa</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SLIDE 4: ENGINEERING -->
-    <div class="hero-slide slide-4" data-slide="3">
-      <div class="hero-content">
-        <div class="hero-text-block">
-          <div class="hero-meta">INGENIERÍA · DISEÑO · VELOCIDAD</div>
-          <h1 class="hero-title">
-            <span class="stroke">CADA</span><br>
-            <span class="accent">MILISEGUNDO</span><br>
-            <span>CUENTA.</span>
-          </h1>
-          <p class="hero-description">
-            En un mundo donde un milisegundo decide quién sube al podio, no podemos permitirnos diseños mediocres. Los datos reales de SpeedBolt-00 se mantienen reservados hasta su presentación oficial.
-          </p>
-          <div class="hero-actions">
-            <a href="#car" class="btn-primary" data-cursor="hover">
-              <span>Ver avance visual</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"/></svg>
-            </a>
-          </div>
-        </div>
-        <div class="hero-visual">
-          <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" style="width: 100%; max-width: 400px;">
-            <!-- Tachometer -->
-            <circle cx="200" cy="200" r="180" fill="none" stroke="#2a2a2a" stroke-width="1"/>
-            <circle cx="200" cy="200" r="160" fill="none" stroke="#1a1a1a" stroke-width="40"/>
-            <path d="M 80 230 A 130 130 0 1 1 320 230" fill="none" stroke="url(#gaugeGrad)" stroke-width="6" stroke-linecap="round"/>
-            <defs>
-              <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#2a7071"/>
-                <stop offset="50%" stop-color="#e37903"/>
-                <stop offset="100%" stop-color="#d23939"/>
-              </linearGradient>
-            </defs>
-            <!-- Tick marks -->
-            <g stroke="#666" stroke-width="2">
-              <line x1="200" y1="40" x2="200" y2="55"/>
-              <line x1="60" y1="200" x2="75" y2="200"/>
-              <line x1="340" y1="200" x2="325" y2="200"/>
-              <line x1="100" y1="100" x2="110" y2="110"/>
-              <line x1="300" y1="100" x2="290" y2="110"/>
-            </g>
-            <!-- Needle -->
-            <line x1="200" y1="200" x2="280" y2="120" stroke="#e37903" stroke-width="3" stroke-linecap="round">
-              <animateTransform attributeName="transform" type="rotate" from="-30 200 200" to="30 200 200" dur="2s" repeatCount="indefinite" additive="sum"/>
-            </line>
-            <circle cx="200" cy="200" r="12" fill="#e37903"/>
-            <circle cx="200" cy="200" r="6" fill="#0a0a0a"/>
-            <!-- Center text -->
-            <text x="200" y="290" text-anchor="middle" font-family="Archivo Black, sans-serif" font-size="44" font-style="italic" fill="#f5f1e8">RPM</text>
-            <text x="200" y="320" text-anchor="middle" font-family="Space Mono, monospace" font-size="11" letter-spacing="3" fill="#888">SPEEDBOLT-00</text>
-          </svg>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- HERO NAV -->
-  <div class="hero-nav">
-    <div class="hero-pagination" id="heroPagination">
-      <button class="pag-dot active" data-target="0" data-cursor="hover"></button>
-      <button class="pag-dot" data-target="1" data-cursor="hover"></button>
-      <button class="pag-dot" data-target="2" data-cursor="hover"></button>
-      <button class="pag-dot" data-target="3" data-cursor="hover"></button>
-    </div>
-    <div class="hero-counter">
-      <span class="current" id="slideCurrent">01</span> / <span>04</span>
-    </div>
-  </div>
-
-  <div class="hero-scroll-hint">
-    <span>SCROLL</span>
-    <span class="line"></span>
-  </div>
-</section>
-
-<!-- MARQUEE -->
-<div class="marquee">
-  <div class="marquee-track">
-    <span>SPEED BOLT <span class="dot"></span></span>
-    <span>STEM RACING DR <span class="dot"></span></span>
-    <span>SpeedBolt-00 <span class="dot"></span></span>
-    <span>TEMPORADA 2026 <span class="dot"></span></span>
-    <span>HECHO EN RD <span class="dot"></span></span>
-    <span>ENGINEERED FOR SPEED <span class="dot"></span></span>
-    <span>SPEED BOLT <span class="dot"></span></span>
-    <span>STEM RACING DR <span class="dot"></span></span>
-    <span>SpeedBolt-00 <span class="dot"></span></span>
-    <span>TEMPORADA 2026 <span class="dot"></span></span>
-    <span>HECHO EN RD <span class="dot"></span></span>
-    <span>ENGINEERED FOR SPEED <span class="dot"></span></span>
-  </div>
-</div>
-
-<!-- ============================================================
-     BRAND / IDENTITY SECTION
-     ============================================================ -->
-<section class="brand-section" id="brand">
-  <div style="max-width: 1400px; margin: 0 auto;">
-
-    <div class="section-header reveal" style="margin-bottom: 60px;">
-      <div>
-        <div class="section-eyebrow">00 · Identidad & aliados</div>
-        <h2 class="section-title" style="color: var(--black); transform: none;">Nuestra <span class="accent">Marca</span></h2>
-        <p class="brand-section-sub">Toca un logo para conocer más sobre cada parte de este proyecto.</p>
-      </div>
-    </div>
-
-    <!-- Logo grid -->
-    <div class="brand-grid reveal">
-
-      <!-- Speed Bolt -->
-      <button class="brand-card brand-card-dark" data-brand="speedbolt">
-        <div class="brand-logo-wrap">
-          <img class="sb-logo-img" src="assets/speedbolt-logo.png" alt="Logo Speed Bolt">
-        </div>
-        <div class="brand-card-subtitle">Escudería · IPISA · Santiago RD</div>
-        <div class="brand-card-arrow">▼</div>
-      </button>
-
-      <!-- IPISA -->
-      <button class="brand-card" data-brand="ipisa">
-        <div class="brand-logo-wrap">
-          <img class="ipisa-logo-img-real" src="assets/ipisa-logo.png" alt="Logo IPISA - Instituto Politécnico Industrial Salesianos Santiago">
-        </div>
-        <div class="brand-card-subtitle">Instituto Politécnico Industrial de Santiago</div>
-        <div class="brand-card-arrow">▼</div>
-      </button>
-
-      <!-- STEM Racing DR -->
-      <button class="brand-card" data-brand="stemracing">
-        <div class="brand-logo-wrap stem-logo-dark-panel">
-          <img class="stem-logo-img-real" src="assets/stemracing-logo.png" alt="Logo STEM Racing Dominican Republic">
-        </div>
-        <div class="brand-card-subtitle">República Dominicana · Competencia Nacional</div>
-        <div class="brand-card-arrow">▼</div>
-      </button>
-
-    </div>
-
-    <!-- Info panel -->
-    <div class="brand-panel" id="brandPanel">
-      <div class="brand-panel-inner" id="brandPanelInner"></div>
-    </div>
-
-    <!-- Color palette -->
-    <div class="brand-palette reveal">
-      <div class="palette-strip">
-        <div style="flex: 3; background: #e37903;"></div>
-        <div style="flex: 2; background: #2a7071;"></div>
-        <div style="flex: 1.5; background: #0a0a0a;"></div>
-        <div style="flex: 1.5; background: #003087;"></div>
-        <div style="flex: 1; background: #7B2FBE;"></div>
-      </div>
-      <div class="palette-labels">
-        <div style="flex: 3;">SB Orange</div>
-        <div style="flex: 2;">SB Teal</div>
-        <div style="flex: 1.5;">SB Black</div>
-        <div style="flex: 1.5;">IPISA Blue</div>
-        <div style="flex: 1;">STEM Purple</div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ============================================================
-     ABOUT / EQUIPO
-     ============================================================ -->
-<section class="about" id="about">
-  <div class="section-header reveal">
-    <div>
-      <div class="section-eyebrow">01 · El equipo</div>
-      <h2 class="section-title">Bienvenidos<br>a <span class="accent">Speed Bolt</span></h2>
-    </div>
-    <a href="#stem" class="section-link" data-cursor="hover">
-      <span>Nuestra misión</span>
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5"/></svg>
-    </a>
-  </div>
-
-  <div class="about-grid">
-    <div class="about-text reveal">
-      <p>Somos un equipo dominicano que está cambiando lo que significa hacer ingeniería estudiantil en el Caribe. Nacidos del mismo espíritu que mueve a las grandes escuderías de la <strong>Fórmula 1</strong>, construimos cada componente de SpeedBolt-00 con la misma obsesión por el detalle, la aerodinámica y el rendimiento.</p>
-      <p>Speed Bolt no es solo un equipo de competencia. Es una declaración: que República Dominicana puede formar la próxima generación de ingenieros, diseñadores y estrategas que el motorsport global necesita. Que el talento existe, lo único que faltaba era la pista.</p>
-      <p>Inspirados por el <strong>martín pescador</strong> —un ave que combina precisión quirúrgica con velocidad explosiva— el naranja eléctrico y el teal profundo definen nuestra identidad visual, nuestra forma de competir y la energía que llevamos al taller cada día.</p>
-
-      <div class="about-stats">
-        <div class="stat">
-          <div class="num model-name">SpeedBolt-00</div>
-          <div class="label">Modelo actual</div>
-        </div>
-        <div class="stat">
-          <div class="num">2026</div>
-          <div class="label">Temporada</div>
-        </div>
-        <div class="stat">
-          <div class="num">100%</div>
-          <div class="label">Hecho en RD</div>
-        </div>
-        <div class="stat">
-          <div class="num">∞</div>
-          <div class="label">Combustible: pasión</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="about-visual reveal reveal-delay-2">
-      <img class="kingfisher-photo" src="assets/martin-pescador.jpg" alt="Martín pescador real">
-      <div class="about-visual-grid"></div>
-      <div class="about-visual-content">
-        <div class="label">Identidad visual · 2026</div>
-        <div class="title">Precisión<br>real del<br>martín<br>pescador.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================
-     STEM RACING SECTION
-     ============================================================ -->
-<section class="stem-section" id="stem">
-  <div class="section-header reveal">
-    <div>
-      <div class="section-eyebrow">02 · La competencia</div>
-      <h2 class="section-title">¿Qué es <span class="accent">STEM Racing</span>?</h2>
-    </div>
-  </div>
-
-  <div class="stem-grid">
-    <div class="stem-content reveal">
-      <h3>El <span class="gradient">campeonato global</span> de mini-bólidos.</h3>
-      <p>STEM Racing (anteriormente conocido como F1 in Schools) es la competencia internacional más prestigiosa donde estudiantes diseñan, fabrican y compiten con autos de carrera a escala impulsados por cartuchos de CO₂. Cada equipo es una mini-escudería: ingenieros, diseñadores, estrategas, especialistas de marketing y un piloto.</p>
-      <p>Los equipos compiten en pistas oficiales de <strong style="color: var(--orange);">20 metros</strong>, donde los autos alcanzan velocidades superiores a <strong style="color: var(--orange);">80 km/h</strong> y el cronómetro mide en milésimas. Ganar requiere perfección: aerodinámica, peso, ángulo de ataque, materiales, manufactura.</p>
-
-      <ul class="stem-features">
-        <li><span class="num">01</span> Diseño CAD profesional</li>
-        <li><span class="num">02</span> Análisis CFD y aerodinámica</li>
-        <li><span class="num">03</span> Manufactura CNC de alta precisión</li>
-        <li><span class="num">04</span> Pruebas en túnel de viento</li>
-        <li><span class="num">05</span> Estrategia de marca y patrocinios</li>
-        <li><span class="num">06</span> Presentación ante jurado internacional</li>
-      </ul>
-    </div>
-
-    <div class="stem-logo-display reveal reveal-delay-2">
-      <div class="stem-corners">
-        <span></span><span></span><span></span><span></span>
-      </div>
-      <div class="stem-logo-graphic">
-        <img class="stem-logo-real-big" src="assets/sr-logo.png" alt="SR — Speed Bolt STEM Racing"/>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================
-     IMPACT SECTION
-     ============================================================ -->
-<section class="impact-section" id="impact">
-  <div class="section-header reveal">
-    <div>
-      <div class="section-eyebrow">03 · Por qué importa</div>
-      <h2 class="section-title">Más allá<br>de la <span class="accent">pista</span></h2>
-    </div>
-  </div>
-
-  <div class="impact-cards">
-    <div class="impact-card reveal" data-num="01" data-cursor="hover">
-      <div class="impact-icon">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M2 17l10 5 10-5M2 12l10 5 10-5M12 2L2 7l10 5 10-5-10-5z"/>
-        </svg>
-      </div>
-      <h4>Educación STEM real</h4>
-      <p>Los estudiantes aplican física, matemáticas, ingeniería y diseño industrial a un proyecto real con consecuencias medibles. No es teoría: o el auto vuela, o pierde.</p>
-    </div>
-
-    <div class="impact-card reveal reveal-delay-1" data-num="02" data-cursor="hover">
-      <div class="impact-icon">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
-        </svg>
-      </div>
-      <h4>Trabajo en equipo</h4>
-      <p>Cada miembro tiene un rol específico: piloto, ingeniero, diseñador, estratega de marca, mánager. Aprenden a ejecutar bajo presión, con plazos reales y métricas reales.</p>
-    </div>
-
-    <div class="impact-card reveal reveal-delay-2" data-num="03" data-cursor="hover">
-      <div class="impact-icon">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <circle cx="12" cy="12" r="10"/>
-          <line x1="2" y1="12" x2="22" y2="12"/>
-          <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
-        </svg>
-      </div>
-      <h4>Visibilidad internacional</h4>
-      <p>Los equipos ganadores compiten contra escuderías de Europa, Asia, América. Es el escenario donde el talento dominicano se mide con el mundo —y suele sorprender.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================
-     CAR SHOWCASE — SpeedBolt-00
-     ============================================================ -->
-<section class="car-showcase" id="car">
-  <div class="section-header reveal" style="justify-content: center; text-align: center;">
-    <div>
-      <div class="section-eyebrow" style="justify-content: center;">04 · El bólido</div>
-      <h2 class="section-title">Conoce el <span class="accent">SpeedBolt-00</span></h2>
-    </div>
-  </div>
-
-  <div class="car-display reveal reveal-delay-1">
-    <div class="car-photo-wrap">
-      <img class="car-photo" src="assets/f1-car.png" alt="Carro real de Formula 1">
-      <div class="car-photo-badge">SpeedBolt-00</div>
-    </div>
-    <p class="car-private-note">El diseño y las especificaciones reales del carro se mantienen reservadas por el equipo. Por ahora solo presentamos la línea visual que inspira a SpeedBolt-00.</p>
-  </div>
-</section>
-
-<!-- ============================================================
-     FEED / BLOG SECTION
-     ============================================================ -->
-<section class="feed-section" id="feed">
-  <div class="section-header reveal">
-    <div>
-      <div class="section-eyebrow">05 · Latest feed</div>
-      <h2 class="section-title">Últimas<br><span class="accent">transmisiones.</span></h2>
-    </div>
-    <button class="section-link" data-cursor="hover" id="feedLoadMore">
-      <span>Ir al feed completo</span>
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M7 7h10v10" stroke="currentColor" stroke-width="2.5"/></svg>
-    </button>
-  </div>
-
-  <div class="feed-grid" id="feedGrid">
-    <!-- Posts get rendered here -->
-  </div>
-</section>
-
-<!-- ============================================================
-     PARTNERS SECTION
-     ============================================================ -->
-<section class="partners-section" id="partners">
-  <div class="section-header reveal">
-    <div>
-      <div class="section-eyebrow">06 · Patrocinadores</div>
-      <h2 class="section-title">Quienes nos<br><span class="accent">impulsan</span></h2>
-    </div>
-  </div>
-
-  <div class="partners-wall">
-    <!-- Title partner -->
-    <div class="partners-tier-block reveal">
-      <div class="partners-tier tier-title">
-        <button class="partner-logo mega" data-cursor="hover" data-partner="ipisa">
-          <img class="partner-ipisa-img" src="assets/ipisa-logo.png" alt="IPISA - Instituto Politécnico Industrial Salesianos Santiago">
-        </button>
-      </div>
-    </div>
-
-    <!-- Principales -->
-    <div class="partners-tier-block reveal">
-      <div class="partners-tier tier-principal">
-        <button class="partner-logo" data-cursor="hover" data-partner="banreservas">
-          <span class="plogo plogo-banreservas">BANRESERVAS</span>
-        </button>
-        <button class="partner-logo" data-cursor="hover" data-partner="popular">
-          <span class="plogo plogo-popular">BANCO POPULAR</span>
-        </button>
-        <button class="partner-logo" data-cursor="hover" data-partner="brugal">
-          <span class="plogo plogo-brugal">BRUGAL</span>
-        </button>
-        <button class="partner-logo" data-cursor="hover" data-partner="claro">
-          <span class="plogo plogo-claro">CLARO</span>
-        </button>
-        <button class="partner-logo" data-cursor="hover" data-partner="presidente">
-          <span class="plogo plogo-presidente">PRESIDENTE</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Oficiales -->
-    <div class="partners-tier-block reveal">
-      <div class="partners-tier tier-oficial">
-        <button class="partner-logo" data-cursor="hover" data-partner="baldom">
-          <span class="plogo">BALDOM</span>
-        </button>
-        <button class="partner-logo" data-cursor="hover" data-partner="bonao">
-          <span class="plogo">INDUBAN</span>
-        </button>
-        <button class="partner-logo" data-cursor="hover" data-partner="cocacola">
-          <span class="plogo">REFRESCAS</span>
-        </button>
-        <button class="partner-logo" data-cursor="hover" data-partner="cnp">
-          <span class="plogo">CNP RD</span>
-        </button>
-        <button class="partner-logo" data-cursor="hover" data-partner="orange">
-          <span class="plogo">ORANGE</span>
-        </button>
-        <button class="partner-logo" data-cursor="hover" data-partner="autozona">
-          <span class="plogo">AUTOZONA</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Aliados -->
-    <div class="partners-tier-block reveal">
-      <div class="partners-tier tier-aliados">
-        <button class="partner-logo small" data-cursor="hover" data-partner="cesur">
-          <span class="plogo">CESUR</span>
-        </button>
-        <button class="partner-logo small" data-cursor="hover" data-partner="cuesta">
-          <span class="plogo">CUESTA TECH</span>
-        </button>
-        <button class="partner-logo small" data-cursor="hover" data-partner="cap">
-          <span class="plogo">CAP CANA</span>
-        </button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================
-     CTA SECTION
-     ============================================================ -->
-<section class="cta-section">
-  <div class="cta-content">
-    <div class="reveal">
-      <h2 class="cta-title">Apoya<br>al equipo<br><span style="color: var(--cream);">SpeedBolt-00.</span></h2>
-      <p class="cta-subtitle">¿Quieres ser parte de la próxima generación de motorsport dominicano? Conviértete en patrocinador o sigue cada actualización del equipo.</p>
-    </div>
-    <div class="cta-button-wrap reveal reveal-delay-2">
-      <a href="#" class="cta-btn" data-cursor="hover" id="becomePartnerBtn">
-        <span>Convertirse en partner</span>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5"/></svg>
-      </a>
-      <a href="#feed" class="cta-btn" data-cursor="hover" style="background: transparent; color: var(--black); border: 2px solid var(--black);">
-        <span>Seguir transmisiones</span>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5"/></svg>
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================
-     FOOTER
-     ============================================================ -->
-<footer>
-  <div class="footer-top">
-    <div class="footer-brand">
-      <img class="footer-logo-img" src="assets/speedbolt-logo.png" alt="Speed Bolt"/>
-      <p>Equipo dominicano de STEM Racing. Diseñamos, construimos y compitimos en la temporada 2026 representando a República Dominicana.</p>
-    </div>
-    <div class="footer-col">
-      <h5>Equipo</h5>
-      <ul>
-        <li><a href="#about">Sobre nosotros</a></li>
-        <li><a href="#stem">Stem Racing</a></li>
-        <li><a href="#car">SpeedBolt-00</a></li>
-        <li><a href="#impact">Impacto</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h5>Contenido</h5>
-      <ul>
-        <li><a href="#feed">Transmisiones</a></li>
-        <li><a href="#partners">Patrocinadores</a></li>
-        <li><a href="#admin">Admin</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h5>Síguenos</h5>
-      <ul>
-        <li><a href="#">Instagram</a></li>
-        <li><a href="#">YouTube</a></li>
-        <li><a href="#">TikTok</a></li>
-        <li><a href="#">LinkedIn</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <div>© 2026 SPEED BOLT RACING · República Dominicana</div>
-    <div>SpeedBolt-00 · STEM RACING DR · ENGINEERED FOR SPEED</div>
-  </div>
-</footer>
-
-</div><!-- /main-site -->
-
-<!-- ============================================================
-     ADMIN SECTION
-     ============================================================ -->
-<div id="admin-section">
-
-  <!-- LOGIN -->
-  <div class="admin-login" id="adminLogin">
-    <h2>Admin <span style="color: var(--orange);">Access</span></h2>
-    <p>Ingresa la contraseña para administrar las publicaciones del feed.</p>
-    <input type="password" id="adminPassword" placeholder="Contraseña" autocomplete="off"/>
-    <button id="adminLoginBtn">Entrar</button>
-    <div class="hint">Demo password: <code>speedbolt2026</code></div>
-    <div style="margin-top: 24px;">
-      <a href="#hero" class="btn-secondary" data-cursor="hover" id="backToSiteFromLogin">← Volver al sitio</a>
-    </div>
-  </div>
-
-  <!-- DASHBOARD -->
-  <div id="adminDashboard" style="display: none;">
-    <div class="admin-header">
-      <h1 class="admin-title">Speed Bolt <span class="accent">Admin.</span></h1>
-      <div class="admin-actions">
-        <a href="#hero" class="btn-cancel" data-cursor="hover" id="backToSite">← Ver sitio</a>
-        <button class="btn-save" id="adminLogoutBtn" data-cursor="hover">Cerrar sesión</button>
-      </div>
-    </div>
-
-    <div class="admin-tabs">
-      <button class="admin-tab active" data-tab="posts">Posts</button>
-      <button class="admin-tab" data-tab="new">Nueva Publicación</button>
-    </div>
-
-    <!-- POSTS LIST -->
-    <div class="admin-pane active" id="pane-posts">
-      <div id="adminPostsList" class="admin-list">
-        <!-- Rendered by JS -->
-      </div>
-    </div>
-
-    <!-- NEW / EDIT FORM -->
-    <div class="admin-pane" id="pane-new">
-      <div class="admin-form">
-        <h3 id="formMode">Nueva publicación</h3>
-        <input type="hidden" id="postId" value=""/>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label>Título</label>
-            <input type="text" id="postTitle" placeholder="Ej. Primer boceto del chasis SpeedBolt-00"/>
-          </div>
-          <div class="form-group">
-            <label>Categoría / Tag</label>
-            <input type="text" id="postTag" placeholder="Ej. Ingeniería, Branding, Competencia" value="Equipo"/>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>Imagen de portada obligatoria</label>
-          <div class="file-input-wrap">
-            <label for="postCover" class="file-input-btn" data-cursor="hover">Elegir imagen</label>
-            <input type="file" id="postCover" accept="image/*" style="display: none;"/>
-            <span class="file-input-name" id="coverFileName">Sin imagen seleccionada</span>
-          </div>
-          <img id="coverPreview" class="file-preview-img" style="display: none;" alt="Preview"/>
-        </div>
-
-        <div class="form-group">
-          <label>Descripción / Contenido</label>
-          <textarea id="postContent" placeholder="Escribe el contenido completo del post aquí..."></textarea>
-        </div>
-
-        <div class="form-group">
-          <label>Documento adjunto (PDF u otro)</label>
-          <div class="file-input-wrap">
-            <label for="postAttachment" class="file-input-btn" data-cursor="hover">Adjuntar documento</label>
-            <input type="file" id="postAttachment" accept=".pdf,.doc,.docx,.zip"/>
-            <span class="file-input-name" id="attachmentFileName">Sin archivo</span>
-            <button type="button" id="clearAttachment" class="btn-icon" style="display: none;">Quitar</button>
-          </div>
-        </div>
-
-        <div class="admin-form-actions">
-          <button class="btn-save" id="savePostBtn" data-cursor="hover">Publicar</button>
-          <button class="btn-cancel" id="cancelEditBtn" data-cursor="hover">Cancelar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ============================================================
-     POST DETAIL MODAL
-     ============================================================ -->
-<div class="modal-overlay" id="postModal">
-  <div class="modal">
-    <button class="modal-close" id="modalClose" data-cursor="hover">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"/></svg>
-    </button>
-    <div class="modal-cover" id="modalCover"></div>
-    <div class="modal-body">
-      <div id="modalTagWrap"></div>
-      <div class="modal-date" id="modalDate"></div>
-      <h2 class="modal-title" id="modalTitle"></h2>
-      <div class="modal-content" id="modalContent"></div>
-      <div id="modalAttachmentWrap"></div>
-    </div>
-  </div>
-</div>
-
-<!-- ============================================================
-     PARTNER DETAIL MODAL
-     ============================================================ -->
-<div class="modal-overlay" id="partnerModal">
-  <div class="partner-modal">
-    <button class="modal-close" id="partnerModalClose" data-cursor="hover">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"/></svg>
-    </button>
-    <div class="partner-modal-header">
-      <div class="partner-modal-name" id="partnerModalName"></div>
-    </div>
-    <div class="partner-modal-body">
-      <div class="partner-modal-tier" id="partnerModalTier"></div>
-      <p class="partner-modal-desc" id="partnerModalDesc"></p>
-      <a id="partnerModalLink" class="partner-modal-link" target="_blank" rel="noopener" data-cursor="hover">
-        <span id="partnerModalLinkText">Visitar sitio oficial</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M7 7h10v10" stroke="currentColor" stroke-width="2.5"/></svg>
-      </a>
-    </div>
-  </div>
-</div>
-
-<!-- TOAST -->
-<div class="toast" id="toast"></div>
-
-<script>
 /* ============================================================
-   SPEED BOLT — APPLICATION LOGIC
+   PAGE REWORK
    ============================================================ */
+.about-rework,
+.stem-rework,
+.impact-rework,
+.car-rework,
+.feed-rework {
+  overflow: clip;
+}
 
-// =============== DATA ====================
-const PARTNERS = {
-  baldom: {
-    name: 'Baldom',
-    tier: 'Patrocinador',
-    desc: 'Marca dominicana líder en sazones y especias, parte fundamental de la cocina del Caribe. Su apoyo impulsa nuestra misión de llevar el talento dominicano a la pista global de STEM Racing.',
-    url: 'https://baldom.com.do'
-  },
-  brugal: {
-    name: 'Brugal',
-    tier: 'Patrocinador',
-    desc: 'Casa fundada en 1888, la ronería más reconocida del país. Su patrocinio refleja un compromiso histórico con la innovación y la excelencia dominicana.',
-    url: 'https://brugal.com.do'
-  },
-  banreservas: {
-    name: 'Banreservas',
-    tier: 'Patrocinador',
-    desc: 'El banco más grande de República Dominicana. Apoya el desarrollo del talento STEM como inversión directa en el futuro económico del país.',
-    url: 'https://www.banreservas.com'
-  },
-  claro: {
-    name: 'Claro RD',
-    tier: 'Patrocinador',
-    desc: 'Líder en telecomunicaciones del país, conecta al equipo Speed Bolt con la red más rápida de RD para transmisiones, telemetría y trabajo colaborativo en la nube.',
-    url: 'https://www.claro.com.do'
-  },
-  presidente: {
-    name: 'Presidente',
-    tier: 'Patrocinador',
-    desc: 'La cerveza orgullo nacional. Patrocinador oficial de eventos del equipo y experiencias para la comunidad de fans.',
-    url: 'https://cnd.com.do'
-  },
-  bonao: {
-    name: 'Industrias Banilejas (INDUBAN)',
-    tier: 'Patrocinador',
-    desc: 'Pioneros del café dominicano de exportación. Combustible oficial de las largas jornadas de taller y simulación CFD del equipo.',
-    url: 'https://induban.com'
-  },
-  popular: {
-    name: 'Banco Popular Dominicano',
-    tier: 'Patrocinador',
-    desc: 'Líder en innovación bancaria del país. Apoya programas STEM y becas para jóvenes ingenieros dominicanos.',
-    url: 'https://www.popularenlinea.com'
-  },
-  cocacola: {
-    name: 'Refrescas Nacional',
-    tier: 'Patrocinador',
-    desc: 'Distribuidora oficial de bebidas para el equipo durante competencias y entrenamientos.',
-    url: '#'
-  },
-  cnp: {
-    name: 'CNP República Dominicana',
-    tier: 'Patrocinador',
-    desc: 'Cluster Nacional de Innovación. Soporte logístico y de redes profesionales para nuestros ingenieros emergentes.',
-    url: '#'
-  },
-  cesur: {
-    name: 'CESUR',
-    tier: 'Patrocinador',
-    desc: 'Centro de Excelencia Sur. Aliado académico en formación STEM para el equipo Speed Bolt.',
-    url: '#'
-  },
-  orange: {
-    name: 'Orange Dominicana',
-    tier: 'Patrocinador',
-    desc: 'Conectividad móvil y tecnología digital para el equipo. Patrocinador de la transformación digital del taller.',
-    url: '#'
-  },
-  ipisa: {
-    name: 'IPISA',
-    tier: 'Patrocinador',
-    desc: 'Instituto Politécnico Industrial de Santiago. Cuna histórica de ingenieros dominicanos y aliado educativo del equipo.',
-    url: 'https://ipisa.edu.do'
-  },
-  autozona: {
-    name: 'AutoZona RD',
-    tier: 'Patrocinador',
-    desc: 'Proveedor de componentes mecánicos y herramientas para el taller del equipo Speed Bolt.',
-    url: '#'
-  },
-  cuesta: {
-    name: 'Cuesta Tech',
-    tier: 'Patrocinador',
-    desc: 'Distribuidor oficial de equipos electrónicos, sensores y hardware de fabricación digital para SpeedBolt-00.',
-    url: '#'
-  },
-  cap: {
-    name: 'Cap Cana',
-    tier: 'Patrocinador',
-    desc: 'Resort y destino oficial de los retiros estratégicos del equipo. Patrocinador de hospitalidad VIP en eventos.',
-    url: 'https://capcana.com'
+.about-shell,
+.car-rework-layout,
+.feed-showcase {
+  width: min(1320px, 100%);
+  margin: 0 auto;
+}
+
+.about-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(340px, 0.9fr);
+  gap: clamp(32px, 5vw, 72px);
+  align-items: start;
+}
+
+.about-story {
+  display: grid;
+  gap: 30px;
+}
+
+.about-story-intro {
+  max-width: 760px;
+}
+
+.about-kicker,
+.car-sidecard-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  border: 1px solid rgba(227, 121, 3, 0.22);
+  background: rgba(227, 121, 3, 0.08);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+
+.about-kicker::before,
+.car-sidecard-kicker::before {
+  content: '';
+  width: 18px;
+  height: 1px;
+  background: currentColor;
+}
+
+.about-lead,
+.impact-overview-text {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(28px, 3.6vw, 48px);
+  line-height: 1.02;
+  letter-spacing: 0;
+  color: var(--cream);
+  transform: skewX(-4deg);
+  margin-top: 18px;
+}
+
+.about-copy-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px 28px;
+}
+
+.about-copy-grid p {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 24px 24px 26px;
+  color: rgba(245, 241, 232, 0.82);
+  line-height: 1.8;
+  font-size: 15px;
+}
+
+.about-copy-grid p:last-child {
+  grid-column: 1 / -1;
+}
+
+.about-principles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.about-principle,
+.stem-metric-card,
+.car-sidecard-item {
+  background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 22px 20px;
+  transition:
+    transform 180ms var(--ease-out-expo),
+    border-color 180ms ease,
+    background 180ms ease;
+}
+
+.about-principle:hover,
+.stem-metric-card:hover,
+.car-sidecard-item:hover {
+  transform: translateY(-3px);
+  border-color: rgba(227,121,3,0.35);
+}
+
+.about-principle-label,
+.car-sidecard-value {
+  display: block;
+  margin-bottom: 10px;
+  font-family: var(--font-sub);
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--cream);
+}
+
+.about-principle p {
+  color: var(--gray-3);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.about-visual-stack {
+  display: grid;
+  gap: 22px;
+}
+
+.about-stats-rework {
+  margin-top: 0;
+}
+
+.about-stats-rework .stat {
+  min-height: 148px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.stem-stage {
+  width: min(1320px, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: 30px;
+}
+
+.stem-rework .stem-grid {
+  gap: clamp(32px, 4vw, 64px);
+  align-items: stretch;
+}
+
+.stem-rework .stem-content {
+  display: grid;
+  align-content: start;
+}
+
+.stem-rework .stem-content p {
+  max-width: 720px;
+}
+
+.stem-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.stem-metric-value {
+  display: block;
+  margin-bottom: 6px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(26px, 3.2vw, 42px);
+  color: var(--black);
+  line-height: 0.95;
+  transform: skewX(-5deg);
+}
+
+.stem-metric-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #666;
+}
+
+.stem-feature-band {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: #fff;
+}
+
+.stem-feature-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 82px;
+  padding: 0 24px;
+  border-right: 1px solid rgba(0,0,0,0.08);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  font-family: var(--font-sub);
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--black);
+}
+
+.stem-feature-item:nth-child(3n) {
+  border-right: none;
+}
+
+.stem-feature-item .num {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--orange);
+}
+
+.impact-rework .section-header {
+  margin-bottom: 42px;
+}
+
+.impact-overview {
+  width: min(980px, 100%);
+  margin: 0 auto 34px;
+  text-align: center;
+}
+
+.impact-overview-text {
+  margin-top: 0;
+}
+
+.impact-cards-rework {
+  width: min(1320px, 100%);
+  margin: 0 auto;
+  gap: 20px;
+}
+
+.impact-cards-rework .impact-card {
+  min-height: 100%;
+  padding: 44px 34px 36px;
+}
+
+.impact-cards-rework .impact-card p {
+  max-width: 34ch;
+}
+
+.car-rework-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(320px, 0.6fr);
+  gap: clamp(28px, 4vw, 54px);
+  align-items: center;
+}
+
+.car-rework .car-display {
+  margin: 0;
+  max-width: none;
+}
+
+.car-rework .car-photo-wrap {
+  border-width: 1px;
+  border-color: rgba(227,121,3,0.22);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0)),
+    #050505;
+}
+
+.car-rework .car-photo {
+  animation-duration: 6s;
+}
+
+.car-sidecard {
+  background: rgba(10,10,10,0.76);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: clamp(26px, 3vw, 38px);
+  display: grid;
+  gap: 20px;
+}
+
+.car-sidecard-title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(30px, 3.2vw, 46px);
+  line-height: 0.96;
+  letter-spacing: 0;
+  color: var(--cream);
+  transform: skewX(-5deg);
+}
+
+.car-rework .car-private-note {
+  margin: 0;
+  max-width: none;
+  text-align: left;
+  font-size: 15px;
+  color: rgba(245,241,232,0.72);
+}
+
+.car-sidecard-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.car-sidecard-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(245,241,232,0.54);
+}
+
+.feed-showcase {
+  display: grid;
+  grid-template-columns: minmax(0, 1.06fr) minmax(0, 0.94fr);
+  gap: 26px;
+  align-items: start;
+}
+
+.feed-featured {
+  position: sticky;
+  top: 110px;
+}
+
+.feed-rework .feed-grid {
+  grid-template-columns: 1fr;
+  gap: 22px;
+}
+
+.post-card {
+  transition:
+    transform 220ms var(--ease-out-expo),
+    border-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.post-card:active,
+.section-link:active,
+.btn-primary:active,
+.btn-secondary:active,
+.cta-btn:active,
+.nav-cta:active,
+.brand-card:active,
+.partner-logo:active {
+  transform: scale(0.985);
+}
+
+.post-card-featured {
+  min-height: 100%;
+}
+
+.post-card-featured .post-cover {
+  aspect-ratio: 16 / 12;
+}
+
+.post-card-featured .post-body {
+  padding: 34px;
+}
+
+.post-card-featured .post-title {
+  font-size: clamp(28px, 3vw, 38px);
+  line-height: 1.02;
+  max-width: 14ch;
+}
+
+.post-card-featured .post-excerpt {
+  font-size: 15px;
+  line-height: 1.75;
+  -webkit-line-clamp: 4;
+}
+
+.post-card-featured .post-read-more {
+  margin-top: 10px;
+}
+
+@media (max-width: 1180px) {
+  .about-shell,
+  .car-rework-layout,
+  .feed-showcase {
+    grid-template-columns: 1fr;
   }
-};
 
-const PARTNER_CONTACT = {
-  name: 'Sé partner de Speed Bolt',
-  tier: 'Contacto oficial',
-  desc: 'Queremos construir alianzas que impulsen talento joven, ingeniería aplicada y representación dominicana en STEM Racing. Para conversar sobre patrocinios o colaboraciones, contáctanos al (809) 724-5700 o escribe a info@ipisa.edu.do.',
-  url: 'mailto:info@ipisa.edu.do',
-  linkLabel: 'Escribir por correo'
-};
-
-const SAMPLE_POSTS = [
-  {
-    id: 'sample-1',
-    title: 'Identidad visual revelada',
-    tag: 'Branding',
-    excerpt: '¡La espera terminó! Presentamos oficialmente la identidad visual de Speed Bolt. El naranja eléctrico y el teal del martín pescador definen nuestro lenguaje.',
-    content: '¡La espera terminó! Presentamos oficialmente la identidad visual de Speed Bolt.\n\nEl naranja eléctrico (#e37903) y el teal del martín pescador (#2a7071) definen nuestro lenguaje visual. Estos colores no son aleatorios: están inspirados en una de las aves más rápidas y precisas del planeta, capaz de detectar a su presa bajo el agua y atacar con velocidad quirúrgica.\n\nLa tipografía F1-style fue elegida para representar movimiento, agresividad y precisión técnica. Cada elemento del sistema visual está diseñado para escalar desde un sticker hasta una vela de barco.\n\nEl logotipo combina líneas dinámicas que sugieren velocidad, con la silueta inconfundible de un monoplaza. El "Bolt" en naranja simboliza la chispa, el rayo, la decisión instantánea que marca la diferencia entre subir al podio o perderlo todo.',
-    cover: 'assets/speedbolt-logo.png',
-    coverFallback: 'IV',
-    attachment: null,
-    date: '10 de abril de 2026'
-  },
-  {
-    id: 'sample-2',
-    title: 'Primer adelanto de SpeedBolt-00',
-    tag: 'Ingeniería',
-    excerpt: 'El equipo ya trabaja en SpeedBolt-00, pero los detalles técnicos se mantienen reservados hasta el momento oficial de presentación.',
-    content: 'El equipo ya trabaja en SpeedBolt-00, pero los detalles técnicos se mantienen reservados hasta el momento oficial de presentación.\n\nPor ahora podemos contar que el proceso combina investigación, diseño, pruebas internas y muchas horas de taller. Queremos mostrar la energía del proyecto sin adelantar datos que todavía no deben publicarse.\n\nCuando llegue el momento, el equipo compartirá la evolución del carro con una presentación clara y bien cuidada. Hasta entonces, SpeedBolt-00 sigue en desarrollo.',
-    cover: 'assets/f1-car.jpg',
-    coverFallback: 'SB',
-    attachment: null,
-    date: '15 de abril de 2026'
-  },
-  {
-    id: 'sample-3',
-    title: 'Bienvenidos a la temporada 2026',
-    tag: 'Equipo',
-    excerpt: 'Después de meses de preparación, oficialmente arrancamos la temporada 2026 de STEM Racing. Speed Bolt está listo para competir.',
-    content: 'Después de meses de preparación, organización del equipo y planificación estratégica, oficialmente arrancamos la temporada 2026 de STEM Racing. Speed Bolt está listo para competir.\n\nEste año el equipo cuenta con seis miembros oficiales: piloto, ingeniero de diseño, ingeniero de manufactura, manager de equipo, especialista de marca y estratega de patrocinios. Cada uno con responsabilidades específicas y objetivos medibles.\n\nNuestro objetivo no es solamente clasificar para la final regional. Vamos por el podio nacional, con la mira puesta en representar a República Dominicana en la final mundial. Sabemos que el camino es duro, pero también sabemos algo más importante: tenemos el talento, tenemos el equipo, y tenemos las ganas.\n\n¡Bienvenidos a la era Speed Bolt!',
-    cover: 'assets/martin-pescador.jpg',
-    coverFallback: 'SB',
-    attachment: null,
-    date: '5 de mayo de 2026'
+  .about-copy-grid,
+  .about-principles,
+  .stem-feature-band {
+    grid-template-columns: 1fr 1fr;
   }
-];
 
-const POST_COVER_POOL = [
-  'assets/speedbolt-logo.png',
-  'assets/f1-car.jpg',
-  'assets/martin-pescador.jpg'
-];
-
-// =============== STATE ====================
-let posts = [];
-let isAdmin = false;
-const ADMIN_PASSWORD = 'speedbolt2026';
-
-// =============== STORAGE ====================
-async function loadPosts() {
-  try {
-    const result = await window.storage.get('speedbolt-posts', true);
-    if (result && result.value) {
-      posts = JSON.parse(result.value);
-    } else {
-      posts = SAMPLE_POSTS;
-      await savePosts();
-    }
-  } catch (err) {
-    posts = SAMPLE_POSTS;
+  .stem-feature-item:nth-child(3n) {
+    border-right: 1px solid rgba(0,0,0,0.08);
   }
-  posts = posts.map((post, index) => ({
-    ...post,
-    cover: post.cover || POST_COVER_POOL[index % POST_COVER_POOL.length]
-  }));
-  renderFeed();
-  renderAdminList();
-}
 
-async function savePosts() {
-  try {
-    await window.storage.set('speedbolt-posts', JSON.stringify(posts), true);
-  } catch (err) {
-    console.error('Save failed:', err);
-    showToast('Error guardando datos', 'error');
+  .stem-feature-item:nth-child(2n) {
+    border-right: none;
   }
-}
 
-// =============== TOAST ====================
-function showToast(message, type) {
-  const toast = document.getElementById('toast');
-  toast.textContent = message;
-  toast.className = 'toast show' + (type === 'error' ? ' error' : '');
-  setTimeout(() => toast.className = 'toast', 3500);
-}
-
-// =============== PRELOADER ====================
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    document.getElementById('preloader').classList.add('done');
-  }, 1700);
-});
-
-// =============== CUSTOM CURSOR ====================
-const cursorDot = document.getElementById('cursorDot');
-const cursorRing = document.getElementById('cursorRing');
-let mouseX = 0, mouseY = 0;
-let ringX = 0, ringY = 0;
-
-window.addEventListener('mousemove', (e) => {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
-  cursorDot.style.left = mouseX + 'px';
-  cursorDot.style.top = mouseY + 'px';
-});
-function animateRing() {
-  ringX += (mouseX - ringX) * 0.18;
-  ringY += (mouseY - ringY) * 0.18;
-  cursorRing.style.left = ringX + 'px';
-  cursorRing.style.top = ringY + 'px';
-  requestAnimationFrame(animateRing);
-}
-animateRing();
-
-document.addEventListener('mouseover', (e) => {
-  const el = e.target.closest('[data-cursor="hover"], button, a, input, textarea');
-  if (el) cursorRing.classList.add('hover');
-});
-document.addEventListener('mouseout', (e) => {
-  const el = e.target.closest('[data-cursor="hover"], button, a, input, textarea');
-  if (el) cursorRing.classList.remove('hover');
-});
-
-// =============== NAV ====================
-const nav = document.getElementById('nav');
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 60) nav.classList.add('scrolled');
-  else nav.classList.remove('scrolled');
-});
-
-// Mobile menu
-const mobileToggle = document.getElementById('mobileToggle');
-const mobileMenu = document.getElementById('mobileMenu');
-mobileToggle.addEventListener('click', () => {
-  mobileMenu.classList.toggle('open');
-});
-mobileMenu.querySelectorAll('a').forEach(a => {
-  a.addEventListener('click', () => mobileMenu.classList.remove('open'));
-});
-
-// =============== HERO SLIDER (3D coverflow / ruleta) ====================
-const slides = document.querySelectorAll('.hero-slide');
-const dots = document.querySelectorAll('.pag-dot');
-const slideCurrent = document.getElementById('slideCurrent');
-let currentSlide = 0;
-let slideInterval;
-const SLIDE_DURATION = 6000;
-
-function applySlidePositions() {
-  const total = slides.length;
-  const leftIdx = (currentSlide - 1 + total) % total;
-  const rightIdx = (currentSlide + 1) % total;
-
-  slides.forEach((slide, i) => {
-    slide.classList.remove(
-      'pos-center', 'pos-left', 'pos-right',
-      'pos-hidden-left', 'pos-hidden-right', 'active'
-    );
-    if (i === currentSlide) {
-      slide.classList.add('pos-center', 'active');
-    } else if (i === leftIdx) {
-      slide.classList.add('pos-left');
-    } else if (i === rightIdx) {
-      slide.classList.add('pos-right');
-    } else {
-      // Resto: ocultos. El siguiente que entrará por la derecha
-      // queda en pos-hidden-right (escondido detrás-derecha).
-      const distRight = (i - currentSlide + total) % total;
-      const distLeft = (currentSlide - i + total) % total;
-      if (distRight <= distLeft) {
-        slide.classList.add('pos-hidden-right');
-      } else {
-        slide.classList.add('pos-hidden-left');
-      }
-    }
-  });
-}
-
-function goToSlide(index) {
-  dots[currentSlide].classList.remove('active');
-  currentSlide = ((index % slides.length) + slides.length) % slides.length;
-  dots[currentSlide].classList.add('active');
-  slideCurrent.textContent = String(currentSlide + 1).padStart(2, '0');
-  applySlidePositions();
-}
-
-function nextSlide() {
-  goToSlide(currentSlide + 1);
-}
-function prevSlide() {
-  goToSlide(currentSlide - 1);
-}
-
-function startSlider() {
-  clearInterval(slideInterval);
-  slideInterval = setInterval(nextSlide, SLIDE_DURATION);
-}
-
-dots.forEach(dot => {
-  dot.addEventListener('click', () => {
-    goToSlide(parseInt(dot.dataset.target));
-    startSlider();
-  });
-});
-
-// Click en los slides laterales para navegar
-slides.forEach((slide, i) => {
-  slide.addEventListener('click', (e) => {
-    if (slide.classList.contains('pos-left')) {
-      e.preventDefault();
-      prevSlide();
-      startSlider();
-    } else if (slide.classList.contains('pos-right')) {
-      e.preventDefault();
-      nextSlide();
-      startSlider();
-    }
-  });
-});
-
-// Estado inicial
-applySlidePositions();
-startSlider();
-
-// =============== SCROLL REVEAL ====================
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      revealObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.12 });
-
-document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
-
-// =============== FEED RENDERING ====================
-function renderFeed() {
-  const grid = document.getElementById('feedGrid');
-  if (!posts.length) {
-    grid.innerHTML = '<div class="post-empty"><h3>Aún no hay transmisiones</h3><p>Pronto vas a ver las novedades del equipo aquí.</p></div>';
-    return;
-  }
-  // sort by date descending (most recent first - assuming order maintained, newest unshifted)
-  grid.innerHTML = posts.map(p => `
-    <article class="post-card" data-id="${p.id}" data-cursor="hover">
-      <div class="post-cover">
-        <div class="post-tag">${escapeHtml(p.tag)}</div>
-        ${p.cover ? `<img src="${p.cover}" alt="${escapeHtml(p.title)}"/>` : `<div class="post-cover-fallback">${escapeHtml(p.coverFallback || 'SB')}</div>`}
-      </div>
-      <div class="post-body">
-        <div class="post-date">${escapeHtml(p.date)}</div>
-        <h3 class="post-title">${escapeHtml(p.title)}</h3>
-        <p class="post-excerpt">${escapeHtml(p.excerpt || (p.content || '').slice(0, 140))}</p>
-        <span class="post-read-more">Leer más
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5"/></svg>
-        </span>
-      </div>
-    </article>
-  `).join('');
-
-  grid.querySelectorAll('.post-card').forEach(card => {
-    card.addEventListener('click', () => openPostModal(card.dataset.id));
-  });
-}
-
-function escapeHtml(str) {
-  if (!str) return '';
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
-
-// =============== POST MODAL ====================
-const postModal = document.getElementById('postModal');
-function openPostModal(id) {
-  const post = posts.find(p => p.id === id);
-  if (!post) return;
-
-  document.getElementById('modalCover').innerHTML = post.cover
-    ? `<img src="${post.cover}" alt="${escapeHtml(post.title)}"/>`
-    : `<div class="modal-cover-fallback">${escapeHtml(post.coverFallback || 'SB')}</div>`;
-
-  document.getElementById('modalTagWrap').innerHTML = `<span class="modal-tag">${escapeHtml(post.tag)}</span>`;
-  document.getElementById('modalDate').textContent = post.date;
-  document.getElementById('modalTitle').textContent = post.title;
-  document.getElementById('modalContent').textContent = post.content;
-
-  const attachmentWrap = document.getElementById('modalAttachmentWrap');
-  if (post.attachment && post.attachment.data) {
-    attachmentWrap.innerHTML = `
-      <a href="${post.attachment.data}" download="${escapeHtml(post.attachment.name)}" class="modal-attachment" data-cursor="hover">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-        <span>Descargar ${escapeHtml(post.attachment.name)}</span>
-      </a>`;
-  } else {
-    attachmentWrap.innerHTML = '';
-  }
-  postModal.classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-document.getElementById('modalClose').addEventListener('click', closePostModal);
-postModal.addEventListener('click', (e) => {
-  if (e.target === postModal) closePostModal();
-});
-function closePostModal() {
-  postModal.classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-// =============== PARTNER MODAL ====================
-const partnerModal = document.getElementById('partnerModal');
-function openPartnerModal(data) {
-  if (!data) return;
-  document.getElementById('partnerModalName').textContent = data.name;
-  document.getElementById('partnerModalTier').textContent = data.tier;
-  document.getElementById('partnerModalDesc').textContent = data.desc;
-  document.getElementById('partnerModalLink').href = data.url;
-  document.getElementById('partnerModalLinkText').textContent = data.linkLabel || 'Visitar sitio oficial';
-  partnerModal.classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-document.querySelectorAll('.partner-card, .partner-logo').forEach(card => {
-  card.addEventListener('click', () => {
-    const key = card.dataset.partner;
-    if (key && PARTNERS[key]) openPartnerModal(PARTNERS[key]);
-  });
-});
-document.getElementById('becomePartnerBtn').addEventListener('click', (e) => {
-  e.preventDefault();
-  openPartnerModal(PARTNER_CONTACT);
-});
-document.getElementById('partnerModalClose').addEventListener('click', closePartnerModal);
-partnerModal.addEventListener('click', (e) => {
-  if (e.target === partnerModal) closePartnerModal();
-});
-function closePartnerModal() {
-  partnerModal.classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-// Escape closes any modal
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    closePostModal();
-    closePartnerModal();
-  }
-});
-
-// =============== ADMIN ROUTING ====================
-function checkAdminRoute() {
-  const hash = window.location.hash;
-  const mainSite = document.getElementById('main-site');
-  const adminSection = document.getElementById('admin-section');
-  if (hash === '#admin') {
-    mainSite.classList.add('hidden');
-    adminSection.classList.add('active');
-    if (isAdmin) {
-      document.getElementById('adminLogin').style.display = 'none';
-      document.getElementById('adminDashboard').style.display = 'block';
-    } else {
-      document.getElementById('adminLogin').style.display = 'block';
-      document.getElementById('adminDashboard').style.display = 'none';
-    }
-    window.scrollTo(0, 0);
-  } else {
-    mainSite.classList.remove('hidden');
-    adminSection.classList.remove('active');
-  }
-}
-window.addEventListener('hashchange', checkAdminRoute);
-checkAdminRoute();
-
-// Login
-document.getElementById('adminLoginBtn').addEventListener('click', adminLogin);
-document.getElementById('adminPassword').addEventListener('keyup', (e) => {
-  if (e.key === 'Enter') adminLogin();
-});
-function adminLogin() {
-  const pass = document.getElementById('adminPassword').value;
-  if (pass === ADMIN_PASSWORD) {
-    isAdmin = true;
-    document.getElementById('adminLogin').style.display = 'none';
-    document.getElementById('adminDashboard').style.display = 'block';
-    showToast('Bienvenido, admin');
-    renderAdminList();
-  } else {
-    showToast('Contraseña incorrecta', 'error');
-    document.getElementById('adminPassword').value = '';
+  .feed-featured {
+    position: static;
   }
 }
 
-document.getElementById('adminLogoutBtn').addEventListener('click', () => {
-  isAdmin = false;
-  document.getElementById('adminLogin').style.display = 'block';
-  document.getElementById('adminDashboard').style.display = 'none';
-  document.getElementById('adminPassword').value = '';
-  showToast('Sesión cerrada');
-});
-
-// =============== ADMIN TABS ====================
-document.querySelectorAll('.admin-tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.admin-pane').forEach(p => p.classList.remove('active'));
-    tab.classList.add('active');
-    document.getElementById('pane-' + tab.dataset.tab).classList.add('active');
-    if (tab.dataset.tab === 'new') {
-      // Reset form when manually navigating to new
-      if (!document.getElementById('postId').value) resetForm();
-    }
-  });
-});
-
-// =============== ADMIN POST LIST ====================
-function renderAdminList() {
-  const list = document.getElementById('adminPostsList');
-  if (!posts.length) {
-    list.innerHTML = '<div style="padding: 40px; text-align: center; color: var(--gray-3); border: 1px dashed var(--gray-1);">No hay publicaciones aún. Crea la primera.</div>';
-    return;
+@media (max-width: 900px) {
+  .about-copy-grid,
+  .about-principles,
+  .stem-metrics,
+  .impact-cards-rework,
+  .stem-feature-band {
+    grid-template-columns: 1fr;
   }
-  list.innerHTML = posts.map(p => `
-    <div class="admin-item" data-id="${p.id}">
-      <div class="admin-item-cover">
-        ${p.cover ? `<img src="${p.cover}" alt=""/>` : `<div class="admin-item-cover-fallback">${escapeHtml(p.coverFallback || 'SB')}</div>`}
-      </div>
-      <div class="admin-item-info">
-        <h4>${escapeHtml(p.title)}</h4>
-        <div class="meta"><span class="tag-pill">${escapeHtml(p.tag)}</span> ${escapeHtml(p.date)}${p.attachment ? ' · 📎 Adjunto' : ''}</div>
-      </div>
-      <div class="admin-item-actions">
-        <button class="btn-icon edit-post" data-id="${p.id}" data-cursor="hover">Editar</button>
-        <button class="btn-icon danger delete-post" data-id="${p.id}" data-cursor="hover">Borrar</button>
-      </div>
-    </div>
-  `).join('');
 
-  list.querySelectorAll('.edit-post').forEach(btn => {
-    btn.addEventListener('click', () => editPost(btn.dataset.id));
-  });
-  list.querySelectorAll('.delete-post').forEach(btn => {
-    btn.addEventListener('click', () => deletePost(btn.dataset.id));
-  });
+  .about-copy-grid p:last-child {
+    grid-column: auto;
+  }
+
+  .stem-feature-item,
+  .stem-feature-item:nth-child(3n),
+  .stem-feature-item:nth-child(2n) {
+    border-right: none;
+  }
+
+  .post-card-featured .post-title,
+  .about-lead,
+  .impact-overview-text,
+  .car-sidecard-title {
+    transform: none;
+  }
 }
 
-// =============== POST FORM ====================
-let coverDataURL = null;
-let attachmentData = null; // {data, name}
-
-document.getElementById('postCover').addEventListener('change', async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (ev) => {
-    coverDataURL = ev.target.result;
-    document.getElementById('coverFileName').textContent = file.name;
-    const preview = document.getElementById('coverPreview');
-    preview.src = coverDataURL;
-    preview.style.display = 'block';
-  };
-  reader.readAsDataURL(file);
-});
-
-document.getElementById('postAttachment').addEventListener('change', async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (ev) => {
-    attachmentData = { data: ev.target.result, name: file.name };
-    document.getElementById('attachmentFileName').textContent = file.name;
-    document.getElementById('clearAttachment').style.display = 'inline-block';
-  };
-  reader.readAsDataURL(file);
-});
-
-document.getElementById('clearAttachment').addEventListener('click', () => {
-  attachmentData = null;
-  document.getElementById('postAttachment').value = '';
-  document.getElementById('attachmentFileName').textContent = 'Sin archivo';
-  document.getElementById('clearAttachment').style.display = 'none';
-});
-
-document.getElementById('savePostBtn').addEventListener('click', savePost);
-document.getElementById('cancelEditBtn').addEventListener('click', () => {
-  resetForm();
-  // switch back to posts tab
-  document.querySelector('.admin-tab[data-tab="posts"]').click();
-});
-
-async function savePost() {
-  const title = document.getElementById('postTitle').value.trim();
-  const tag = document.getElementById('postTag').value.trim() || 'Equipo';
-  const content = document.getElementById('postContent').value.trim();
-  const id = document.getElementById('postId').value;
-  const existingPost = id ? posts.find(p => p.id === id) : null;
-
-  if (!title) { showToast('El título es obligatorio', 'error'); return; }
-  if (!content) { showToast('El contenido es obligatorio', 'error'); return; }
-  if (!coverDataURL && !existingPost?.cover) { showToast('La imagen de portada es obligatoria', 'error'); return; }
-
-  const now = new Date();
-  const months = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-  const dateStr = `${now.getDate()} de ${months[now.getMonth()]} de ${now.getFullYear()}`;
-
-  if (id) {
-    // editing
-    const idx = posts.findIndex(p => p.id === id);
-    if (idx >= 0) {
-      const existing = posts[idx];
-      posts[idx] = {
-        ...existing,
-        title, tag, content,
-        excerpt: content.slice(0, 160),
-        cover: coverDataURL !== null ? coverDataURL : existing.cover,
-        coverFallback: existing.coverFallback || (title.match(/\b\w/g) || []).slice(0, 2).join('').toUpperCase(),
-        attachment: attachmentData !== null ? attachmentData : existing.attachment
-      };
-      showToast('Publicación actualizada');
-    }
-  } else {
-    // new
-    const newPost = {
-      id: 'post-' + Date.now(),
-      title, tag, content,
-      excerpt: content.slice(0, 160),
-      cover: coverDataURL,
-      coverFallback: (title.match(/\b\w/g) || []).slice(0, 2).join('').toUpperCase() || 'SB',
-      attachment: attachmentData,
-      date: dateStr
-    };
-    posts.unshift(newPost);
-    showToast('Publicación creada');
+@media (max-width: 700px) {
+  .about-copy-grid p,
+  .about-principle,
+  .stem-metric-card,
+  .car-sidecard-item,
+  .car-sidecard {
+    padding: 20px;
   }
-  await savePosts();
-  renderFeed();
-  renderAdminList();
-  resetForm();
-  document.querySelector('.admin-tab[data-tab="posts"]').click();
+
+  .post-card-featured .post-body {
+    padding: 24px;
+  }
 }
 
-function editPost(id) {
-  const p = posts.find(x => x.id === id);
-  if (!p) return;
-  document.getElementById('formMode').textContent = 'Editar publicación';
-  document.getElementById('postId').value = p.id;
-  document.getElementById('postTitle').value = p.title;
-  document.getElementById('postTag').value = p.tag;
-  document.getElementById('postContent').value = p.content;
-  coverDataURL = null; // null means "keep existing"
-  attachmentData = null;
-  if (p.cover) {
-    document.getElementById('coverFileName').textContent = 'Imagen actual (se mantiene)';
-    const preview = document.getElementById('coverPreview');
-    preview.src = p.cover;
-    preview.style.display = 'block';
-  } else {
-    document.getElementById('coverFileName').textContent = 'Sin imagen seleccionada';
-    document.getElementById('coverPreview').style.display = 'none';
-  }
-  if (p.attachment) {
-    document.getElementById('attachmentFileName').textContent = `Adjunto actual: ${p.attachment.name}`;
-    document.getElementById('clearAttachment').style.display = 'inline-block';
-  } else {
-    document.getElementById('attachmentFileName').textContent = 'Sin archivo';
-    document.getElementById('clearAttachment').style.display = 'none';
-  }
-  document.querySelector('.admin-tab[data-tab="new"]').click();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+/* ============================================================
+   PROFESSIONAL REWORK
+   ============================================================ */
+.hero-rework {
+  background:
+    radial-gradient(circle at 15% 15%, rgba(227,121,3,0.12), transparent 28%),
+    radial-gradient(circle at 85% 20%, rgba(42,112,113,0.14), transparent 26%),
+    linear-gradient(180deg, #080808 0%, #0a0a0a 100%);
+  min-height: 980px;
 }
 
-async function deletePost(id) {
-  if (!confirm('¿Borrar esta publicación de manera permanente?')) return;
-  posts = posts.filter(p => p.id !== id);
-  await savePosts();
-  renderFeed();
-  renderAdminList();
-  showToast('Publicación eliminada');
+.hero-backdrop-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+  background-size: 72px 72px;
+  opacity: 0.14;
+  pointer-events: none;
 }
 
-function resetForm() {
-  document.getElementById('formMode').textContent = 'Nueva publicación';
-  document.getElementById('postId').value = '';
-  document.getElementById('postTitle').value = '';
-  document.getElementById('postTag').value = 'Equipo';
-  document.getElementById('postContent').value = '';
-  document.getElementById('postCover').value = '';
-  document.getElementById('postAttachment').value = '';
-  document.getElementById('coverFileName').textContent = 'Sin imagen seleccionada';
-  document.getElementById('attachmentFileName').textContent = 'Sin archivo';
-  document.getElementById('coverPreview').style.display = 'none';
-  document.getElementById('clearAttachment').style.display = 'none';
-  coverDataURL = null;
-  attachmentData = null;
+.hero-rework .hero-scroll-hint {
+  color: rgba(245,241,232,0.5);
 }
 
-// =============== BRAND SECTION ====================
-const BRAND_DATA = {
-  speedbolt: {
-    name: 'SPEED BOLT',
-    color: '#e37903',
-    info: 'Speed Bolt es la escudería de ingeniería del Instituto Politécnico Industrial de Santiago (IPISA), compitiendo en STEM Racing RD 2026. Diseñamos y construimos un monoplaza a escala con tecnología real, representando a Santiago en la competencia nacional.',
-    url: null
-  },
-  ipisa: {
-    name: 'IPISA',
-    color: '#003087',
-    info: 'El Instituto Politécnico Industrial de Santiago es la institución educativa que respalda y alberga al equipo Speed Bolt. Comprometida con la formación técnica y la innovación, IPISA impulsa proyectos de ingeniería aplicada como Speed Bolt para preparar a sus estudiantes para los retos del mundo real.',
-    url: 'https://www.ipisa.edu.do'
-  },
-  stemracing: {
-    name: 'STEM RACING DR',
-    color: '#7B2FBE',
-    info: 'STEM Racing RD es la competencia nacional de ingeniería estudiantil de República Dominicana, donde equipos de distintas instituciones diseñan, construyen y compiten con carros monoplaza a escala. Inspirada en la Fórmula 1, fusiona ciencia, tecnología, ingeniería y matemáticas en un desafío completamente práctico.',
-    url: 'https://www.stemracingrd.com'
+.hero-rework .mystery-question {
+  font-size: clamp(0.8rem, 1.4vw, 1rem);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.hero-credibility {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  width: min(520px, 100%);
+}
+
+.hero-credibility-item {
+  padding: 16px 18px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  text-align: left;
+}
+
+.hero-credibility-label {
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gray-3);
+}
+
+.hero-credibility-item strong {
+  display: block;
+  font-family: var(--font-sub);
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cream);
+}
+
+.brand-header {
+  align-items: center;
+}
+
+.documents-section {
+  background:
+    linear-gradient(180deg, #ffffff 0%, #f8f5ef 100%);
+  border-top: 1px solid rgba(0,0,0,0.07);
+  position: relative;
+}
+
+.documents-section .section-title,
+.documents-section .section-eyebrow {
+  color: var(--black);
+}
+
+.documents-shell {
+  width: min(1320px, 100%);
+  margin: 0 auto;
+}
+
+.documents-header {
+  margin-bottom: 34px;
+  align-items: center;
+}
+
+.documents-intro {
+  max-width: 400px;
+}
+
+.documents-intro p {
+  color: #555;
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.documents-rail {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.documents-rail-card,
+.documents-empty {
+  background: rgba(255,255,255,0.92);
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.05);
+}
+
+.documents-rail-card {
+  padding: 22px 24px;
+}
+
+.documents-rail-label {
+  display: block;
+  margin-bottom: 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+
+.documents-rail-card strong {
+  color: var(--black);
+  font-family: var(--font-sub);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.documents-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.document-card {
+  display: grid;
+  gap: 20px;
+  padding: 26px 24px 24px;
+  background: rgba(255,255,255,0.92);
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.05);
+  transition:
+    transform 180ms var(--ease-out-expo),
+    box-shadow 180ms ease,
+    border-color 180ms ease;
+}
+
+.document-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(227,121,3,0.35);
+  box-shadow: 0 28px 55px rgba(0,0,0,0.08);
+}
+
+.document-card-top,
+.document-card-meta,
+.document-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.document-card-icon {
+  width: 56px;
+  height: 56px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--black);
+  background: rgba(10,10,10,0.04);
+  border: 1px solid rgba(10,10,10,0.08);
+}
+
+.document-card-icon-pdf {
+  color: var(--orange);
+  border-color: rgba(227,121,3,0.22);
+  background: rgba(227,121,3,0.08);
+}
+
+.document-card-icon-image {
+  color: var(--teal-deep);
+}
+
+.document-card-icon-text {
+  font-family: var(--font-sub);
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.14em;
+}
+
+.document-card-meta {
+  flex: 1;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.document-card-category,
+.document-card-kind,
+.document-modal-tag,
+.document-modal-kind {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.document-card-category,
+.document-modal-tag {
+  color: var(--orange);
+}
+
+.document-card-kind,
+.document-modal-kind {
+  color: #777;
+}
+
+.document-card-title {
+  font-family: var(--font-sub);
+  font-weight: 800;
+  font-size: 24px;
+  line-height: 1.06;
+  text-transform: uppercase;
+  color: var(--black);
+}
+
+.document-card-description {
+  color: #555;
+  font-size: 15px;
+  line-height: 1.72;
+}
+
+.document-card-fileinfo {
+  display: grid;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #888;
+}
+
+.document-card-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid rgba(10,10,10,0.14);
+  background: transparent;
+  color: var(--black);
+  text-decoration: none;
+  font-family: var(--font-sub);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background 180ms ease,
+    color 180ms ease,
+    border-color 180ms ease,
+    transform 180ms var(--ease-out-expo);
+}
+
+.document-card-action:hover {
+  background: var(--orange);
+  color: var(--black);
+  border-color: var(--orange);
+}
+
+.document-card-action:active {
+  transform: scale(0.985);
+}
+
+.documents-empty {
+  padding: 44px;
+  text-align: left;
+}
+
+.documents-empty-kicker {
+  margin-bottom: 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+
+.documents-empty h3 {
+  margin-bottom: 16px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(32px, 4vw, 46px);
+  line-height: 0.98;
+  color: var(--black);
+}
+
+.documents-empty p {
+  margin-bottom: 22px;
+  max-width: 56ch;
+  color: #555;
+  line-height: 1.75;
+}
+
+.document-modal {
+  width: min(1120px, 100%);
+  background: var(--black-soft);
+  border: 1px solid rgba(255,255,255,0.08);
+  transform: translateY(20px);
+  transition: transform 0.35s var(--ease-out-expo);
+}
+
+.modal-overlay.open .document-modal {
+  transform: translateY(0);
+}
+
+.document-modal-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 28px 32px 0;
+}
+
+.document-modal-body {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.85fr) minmax(0, 1.15fr);
+  gap: 28px;
+  padding: 20px 32px 32px;
+}
+
+.document-modal-copy {
+  display: grid;
+  align-content: start;
+  gap: 16px;
+}
+
+.document-modal-description {
+  color: rgba(245,241,232,0.74);
+  font-size: 15px;
+  line-height: 1.72;
+}
+
+.document-modal-preview {
+  min-height: 480px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.08);
+  overflow: hidden;
+}
+
+.document-preview-image,
+.document-preview-frame {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border: 0;
+}
+
+.document-preview-image {
+  object-fit: contain;
+  background: #111;
+}
+
+.document-preview-fallback {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 12px;
+  padding: 34px;
+  color: rgba(245,241,232,0.72);
+}
+
+.document-preview-fallback-label {
+  font-family: var(--font-sub);
+  font-weight: 800;
+  font-size: 20px;
+  text-transform: uppercase;
+  color: var(--cream);
+}
+
+.admin-subtitle {
+  margin-top: 8px;
+  color: var(--gray-3);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.admin-empty-state {
+  padding: 40px;
+  text-align: center;
+  color: var(--gray-3);
+  border: 1px dashed var(--gray-1);
+}
+
+.admin-documents-layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.95fr) minmax(0, 1.05fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.admin-library-list {
+  display: grid;
+  gap: 18px;
+}
+
+.admin-library-head h3 {
+  margin-bottom: 6px;
+  font-family: var(--font-sub);
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+
+.admin-library-head p {
+  color: var(--gray-3);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.admin-item-document {
+  grid-template-columns: 88px 1fr auto;
+}
+
+.admin-item-cover-doc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(227,121,3,0.08);
+  border: 1px solid rgba(227,121,3,0.18);
+  color: var(--orange);
+  font-family: var(--font-sub);
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.admin-document-filename {
+  margin-top: 8px;
+  color: var(--gray-3);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 1180px) {
+  .documents-grid,
+  .documents-rail,
+  .admin-documents-layout,
+  .document-modal-body {
+    grid-template-columns: 1fr;
   }
-};
 
-let activeBrandKey = null;
+  .document-modal-preview {
+    min-height: 380px;
+  }
+}
 
-document.querySelectorAll('.brand-card').forEach(card => {
-  card.addEventListener('click', () => {
-    const brand = card.dataset.brand;
-    const panel = document.getElementById('brandPanel');
-    const inner = document.getElementById('brandPanelInner');
+@media (max-width: 900px) {
+  .hero-credibility {
+    grid-template-columns: 1fr;
+  }
 
-    if (activeBrandKey === brand) {
-      activeBrandKey = null;
-      card.classList.remove('active');
-      card.querySelector('.brand-card-arrow').textContent = '▼';
-      panel.classList.remove('open');
-      return;
-    }
+  .documents-grid {
+    grid-template-columns: 1fr;
+  }
 
-    document.querySelectorAll('.brand-card').forEach(c => {
-      c.classList.remove('active');
-      c.querySelector('.brand-card-arrow').textContent = '▼';
-    });
+  .documents-header {
+    margin-bottom: 26px;
+  }
+}
 
-    activeBrandKey = brand;
-    card.classList.add('active');
-    card.querySelector('.brand-card-arrow').textContent = '▲';
+@media (max-width: 700px) {
+  .document-card,
+  .documents-empty,
+  .documents-rail-card {
+    padding: 20px;
+  }
 
-    const d = BRAND_DATA[brand];
-    inner.innerHTML = `
-      <div class="brand-panel-top">
-        <div class="brand-panel-accent" style="background: ${d.color};"></div>
-        <span class="brand-panel-name" style="color: ${d.color};">${escapeHtml(d.name)}</span>
-      </div>
-      <p class="brand-panel-text">${escapeHtml(d.info)}</p>
-      ${d.url ? `<a href="${d.url}" target="_blank" rel="noopener noreferrer" class="brand-panel-link" style="color: ${d.color}; border-color: ${d.color}55;">Sitio web →</a>` : ''}
-    `;
-    panel.classList.add('open');
-  });
-});
+  .document-card-footer,
+  .document-card-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-// =============== INIT ====================
-loadPosts();
-</script>
-</body>
-</html>
+  .document-modal-head,
+  .document-modal-body {
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+
+  .document-modal-head {
+    padding-top: 24px;
+  }
+}
