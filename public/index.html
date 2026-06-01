@@ -1,0 +1,4547 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Speed Bolt — STEM Racing Dominican Republic</title>
+<link rel="icon" href="assets/speedbolt-logo.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Bebas+Neue&family=League+Spartan:wght@400;600;700;800;900&family=Manrope:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   SPEED BOLT — DESIGN TOKENS
+   ============================================================ */
+:root {
+  --orange: #e37903;
+  --orange-bright: #ff8a0e;
+  --teal: #2a7071;
+  --teal-deep: #1a4f50;
+  --black: #0a0a0a;
+  --black-soft: #141414;
+  --black-card: #1a1a1a;
+  --gray-1: #2a2a2a;
+  --gray-2: #444;
+  --gray-3: #888;
+  --cream: #f5f1e8;
+  --white: #ffffff;
+
+  --font-logo: 'Archivo Black', 'Bebas Neue', sans-serif;
+  --font-display: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-italic-display: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-sub: 'League Spartan', sans-serif;
+  --font-body: 'Codec Pro', 'Manrope', Arial, sans-serif;
+  --font-mono: 'Space Mono', monospace;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  background: var(--black);
+  color: var(--cream);
+  overflow-x: hidden;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  cursor: none;
+}
+@media (max-width: 900px) {
+  body { cursor: auto; }
+}
+
+/* ============================================================
+   CUSTOM CURSOR
+   ============================================================ */
+.cursor-dot, .cursor-ring {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: difference;
+}
+.cursor-dot {
+  width: 6px; height: 6px;
+  background: var(--cream);
+  transition: transform 0.15s var(--ease-out-quart);
+}
+.cursor-ring {
+  width: 36px; height: 36px;
+  border: 1.5px solid var(--orange);
+  transition: width 0.3s var(--ease-out-expo), height 0.3s var(--ease-out-expo), border-color 0.2s;
+}
+.cursor-ring.hover { width: 60px; height: 60px; border-color: var(--cream); }
+@media (max-width: 900px) { .cursor-dot, .cursor-ring { display: none; } }
+
+/* ============================================================
+   GRAIN / NOISE OVERLAY
+   ============================================================ */
+.grain {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ============================================================
+   PRELOADER
+   ============================================================ */
+.preloader {
+  position: fixed; inset: 0;
+  background: var(--black);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 32px;
+  transition: opacity 0.6s var(--ease-out-quart), visibility 0.6s;
+}
+.preloader.done { opacity: 0; visibility: hidden; }
+
+.preloader-logo-img {
+  width: min(70vw, 380px);
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 8px 30px rgba(227, 121, 3, 0.35));
+  animation: pulseLogo 2s ease-in-out infinite;
+}
+@keyframes pulseLogo {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+.preloader-bar {
+  width: min(80vw, 400px);
+  height: 2px;
+  background: var(--gray-1);
+  overflow: hidden;
+}
+.preloader-bar::after {
+  content: '';
+  display: block;
+  height: 100%;
+  background: var(--orange);
+  width: 0%;
+  animation: load 1.6s var(--ease-out-quart) forwards;
+}
+@keyframes load { to { width: 100%; } }
+
+.preloader-meta {
+  display: flex;
+  justify-content: space-between;
+  width: min(80vw, 400px);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--gray-3);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+/* ============================================================
+   NAVIGATION — siempre oscura/consistente
+   ============================================================ */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 14px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(10, 10, 10, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(227, 121, 3, 0.18);
+  transition: padding 0.3s var(--ease-out-quart);
+}
+.nav.scrolled {
+  padding: 10px 40px;
+  background: rgba(10, 10, 10, 0.96);
+}
+@media (max-width: 768px) {
+  .nav { padding: 12px 20px; }
+  .nav.scrolled { padding: 10px 20px; }
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  height: 40px;
+}
+.nav-logo img {
+  height: 100%;
+  width: auto;
+  display: block;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4));
+}
+
+.nav-links {
+  display: flex;
+  gap: 36px;
+  list-style: none;
+  align-items: center;
+}
+.nav-links a {
+  color: var(--cream);
+  text-decoration: none;
+  font-family: var(--font-sub);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  position: relative;
+  padding: 6px 0;
+  transition: color 0.3s;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 0; height: 1.5px;
+  background: var(--orange);
+  transition: width 0.4s var(--ease-out-expo);
+}
+.nav-links a:hover { color: var(--orange); }
+.nav-links a:hover::after { width: 100%; }
+
+.nav-cta {
+  background: var(--orange);
+  color: var(--black);
+  padding: 10px 18px;
+  font-family: var(--font-sub);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out-quart);
+  text-decoration: none;
+  display: inline-block;
+  clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%);
+  padding: 10px 24px;
+}
+.nav-cta:hover {
+  background: var(--cream);
+  transform: translateX(2px);
+}
+
+.nav-mobile-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+}
+.nav-mobile-toggle span {
+  width: 24px; height: 2px;
+  background: var(--cream);
+  transition: all 0.3s;
+}
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  .nav-mobile-toggle { display: flex; }
+}
+
+.nav-mobile-menu {
+  position: fixed; inset: 0;
+  background: var(--black);
+  z-index: 99;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+.nav-mobile-menu.open { display: flex; }
+.nav-mobile-menu a {
+  color: var(--cream);
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-style: italic;
+  transform: skewX(-6deg);
+}
+
+/* ============================================================
+   HERO — MAIN SLIDER
+   ============================================================ */
+.hero {
+  position: relative;
+  min-height: 940px;
+  overflow: hidden;
+  background: #fff;
+  padding: 112px max(20px, 5vw) 86px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero-slides {
+  position: relative;
+  width: min(1480px, 100%);
+  height: clamp(640px, 74vh, 740px);
+  overflow: hidden;
+  background: transparent;
+  perspective: 1600px;
+  isolation: isolate;
+}
+
+/* Coverflow / ruleta: cada slide queda en una de 3 posiciones */
+.hero-slide {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(90%, 1200px);
+  height: 96%;
+  display: flex;
+  align-items: center;
+  padding: clamp(32px, 4.5vw, 64px) clamp(36px, 5.5vw, 84px);
+  background: var(--black);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  box-shadow: 0 28px 80px rgba(10, 10, 10, 0.22);
+  transform: translate(-50%, -50%) scale(0.55);
+  opacity: 0;
+  filter: blur(18px) saturate(0.9);
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+  transition:
+    transform 0.95s var(--ease-out-expo),
+    opacity 0.85s var(--ease-out-expo),
+    filter 0.85s var(--ease-out-expo),
+    box-shadow 0.85s var(--ease-out-expo);
+  will-change: transform, opacity, filter;
+}
+
+/* Slide central — nítido, al frente */
+.hero-slide.pos-center {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  filter: blur(0) saturate(1);
+  pointer-events: auto;
+  z-index: 6;
+  box-shadow: 0 36px 100px rgba(10, 10, 10, 0.5);
+  border-color: rgba(227, 121, 3, 0.15);
+}
+
+/* Slide izquierdo — detrás, difuminado, una porción visible */
+.hero-slide.pos-left {
+  transform: translate(calc(-50% - 70%), -50%) scale(0.6);
+  opacity: 0.35;
+  filter: blur(6px) saturate(0.7);
+  z-index: 2;
+}
+
+/* Slide derecho — detrás, difuminado, una porción visible */
+.hero-slide.pos-right {
+  transform: translate(calc(-50% + 70%), -50%) scale(0.6);
+  opacity: 0.35;
+  filter: blur(6px) saturate(0.7);
+  z-index: 2;
+}
+
+/* Slide oculto detrás (por donde entra el siguiente) */
+.hero-slide.pos-hidden-right {
+  transform: translate(calc(-50% + 75%), -50%) scale(0.4);
+  opacity: 0;
+  filter: blur(20px) saturate(0.6);
+  z-index: 0;
+}
+.hero-slide.pos-hidden-left {
+  transform: translate(calc(-50% - 75%), -50%) scale(0.4);
+  opacity: 0;
+  filter: blur(20px) saturate(0.6);
+  z-index: 0;
+}
+
+.hero-slide.pos-center .hero-text-block {
+  animation: heroCopyIn 0.85s var(--ease-out-expo) both;
+}
+.hero-slide.pos-center .hero-visual {
+  animation: heroVisualIn 0.95s var(--ease-out-expo) both;
+}
+@keyframes heroCopyIn {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes heroVisualIn {
+  from { opacity: 0; transform: translate3d(24px, 18px, -60px) rotateY(10deg); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) rotateY(0deg); }
+}
+
+.hero-slide::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+/* SLIDE 1: SPEED BOLT BRAND */
+.slide-1 {
+  background:
+    radial-gradient(ellipse at 70% 50%, rgba(227, 121, 3, 0.15) 0%, transparent 60%),
+    linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+}
+.slide-1::before {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3Cpattern id='g' width='10' height='10' patternUnits='userSpaceOnUse'%3E%3Cpath d='M0 10L10 0' stroke='%23e37903' stroke-width='0.15' opacity='0.3'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23g)'/%3E%3C/svg%3E");
+  opacity: 0.4;
+}
+
+/* SLIDE 2: STEM RACING */
+.slide-2 {
+  background:
+    radial-gradient(ellipse at 20% 80%, rgba(42, 112, 113, 0.4) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(227, 121, 3, 0.1) 0%, transparent 50%),
+    linear-gradient(180deg, #0d2e2e 0%, #0a0a0a 100%);
+}
+
+/* SLIDE 3: IMPACT */
+.slide-3 {
+  background:
+    radial-gradient(circle at 50% 100%, rgba(227, 121, 3, 0.25) 0%, transparent 60%),
+    linear-gradient(180deg, #0a0a0a 0%, #1a0d00 100%);
+}
+
+/* SLIDE 4: ENGINEERING */
+.slide-4 {
+  background:
+    linear-gradient(135deg, #1a4f50 0%, #0a0a0a 50%, #2a1a00 100%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 5;
+  max-width: 1400px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 48px;
+  align-items: center;
+}
+.hero-content > * { min-width: 0; }
+@media (max-width: 1024px) {
+  .hero-content { grid-template-columns: 1fr; gap: 40px; }
+}
+
+.hero-text-block {
+  position: relative;
+  min-width: 0;
+}
+
+.hero-meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.hero-meta::before {
+  content: '';
+  display: inline-block;
+  width: 40px; height: 1px;
+  background: var(--orange);
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(48px, 7vw, 112px);
+  line-height: 0.88;
+  letter-spacing: 0;
+  color: var(--cream);
+  margin-bottom: 28px;
+  transform: skewX(-6deg);
+  text-transform: uppercase;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+.hero-title .accent { color: var(--orange); }
+.hero-title .stroke {
+  -webkit-text-stroke: 1.5px var(--cream);
+  color: transparent;
+}
+
+.hero-description {
+  font-family: var(--font-body);
+  font-size: clamp(15px, 1.3vw, 18px);
+  line-height: 1.6;
+  color: var(--gray-3);
+  max-width: 480px;
+  margin-bottom: 36px;
+  font-weight: 300;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  background: var(--orange);
+  color: var(--black);
+  padding: 16px 32px;
+  font-family: var(--font-sub);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  clip-path: polygon(6% 0, 100% 0, 94% 100%, 0 100%);
+  padding: 16px 36px;
+  transition: all 0.4s var(--ease-out-expo);
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--cream);
+  transform: translateX(-101%);
+  transition: transform 0.4s var(--ease-out-expo);
+  z-index: 0;
+}
+.btn-primary:hover::before { transform: translateX(0); }
+.btn-primary span, .btn-primary svg { position: relative; z-index: 1; }
+
+.btn-secondary {
+  background: transparent;
+  color: var(--cream);
+  padding: 16px 32px;
+  font-family: var(--font-sub);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border: 1.5px solid var(--cream);
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s var(--ease-out-quart);
+}
+.btn-secondary:hover {
+  background: var(--cream);
+  color: var(--black);
+}
+
+/* HERO VISUAL — F1 CAR SVG / Visual Element */
+.hero-visual {
+  position: relative;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-visual-1 svg {
+  width: 100%;
+  max-width: 600px;
+  filter: drop-shadow(0 20px 40px rgba(227, 121, 3, 0.3));
+  animation: floatCar 4s ease-in-out infinite;
+}
+@keyframes floatCar {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(0.5deg); }
+}
+
+.speed-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.speed-lines line {
+  stroke: var(--orange);
+  stroke-width: 2;
+  opacity: 0;
+  animation: streak 1.5s linear infinite;
+}
+@keyframes streak {
+  0% { opacity: 0; transform: translateX(50px); }
+  50% { opacity: 1; }
+  100% { opacity: 0; transform: translateX(-200px); }
+}
+
+/* HERO VISUAL — STEM RACING LOGO (imagen real) */
+.stem-logo {
+  position: relative;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+}
+.stem-logo-real-hero {
+  width: 100%;
+  max-width: 380px;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 18px 50px rgba(255, 45, 139, 0.3));
+}
+.stem-logo-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  color: var(--gray-3);
+  text-transform: uppercase;
+}
+
+/* HERO VISUAL — IMPACT NUMBERS */
+.impact-numbers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.impact-number {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(227, 121, 3, 0.2);
+  padding: 32px 24px;
+  position: relative;
+  overflow: hidden;
+}
+.impact-number::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px; height: 100%;
+  background: var(--orange);
+}
+.impact-number .num {
+  font-family: var(--font-display);
+  font-size: clamp(44px, 5vw, 72px);
+  font-style: italic;
+  color: var(--cream);
+  line-height: 1;
+  margin-bottom: 8px;
+  transform: skewX(-6deg);
+  display: inline-block;
+}
+.impact-number .num.model-name,
+.stat .num.model-name {
+  font-size: clamp(18px, 1.8vw, 28px);
+  white-space: nowrap;
+  word-break: keep-all;
+}
+.impact-number .label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--gray-3);
+}
+
+/* HERO PAGINATION */
+.hero-nav {
+  position: absolute;
+  bottom: 112px;
+  left: 50%;
+  width: min(1180px, calc(100% - max(40px, 10vw)));
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.hero-pagination {
+  display: flex;
+  gap: 8px;
+}
+.pag-dot {
+  width: 40px; height: 3px;
+  background: rgba(245, 241, 232, 0.2);
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.pag-dot.active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--orange);
+  animation: progress 6s linear forwards;
+}
+@keyframes progress {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+.hero-counter {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--cream);
+  letter-spacing: 0.15em;
+}
+.hero-counter .current {
+  color: var(--orange);
+  font-size: 32px;
+  font-family: var(--font-display);
+  font-style: italic;
+}
+
+.hero-scroll-hint {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #777;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  z-index: 10;
+}
+.hero-scroll-hint .line {
+  width: 1px;
+  height: 28px;
+  background: var(--orange);
+  animation: scrollHint 2s ease-in-out infinite;
+  transform-origin: top;
+}
+@keyframes scrollHint {
+  0%, 100% { transform: scaleY(0.4); }
+  50% { transform: scaleY(1); }
+}
+@media (max-width: 900px) {
+  .hero-scroll-hint { display: none; }
+}
+/* En tablet/mobile mostramos solo el slide central */
+@media (max-width: 900px) {
+  .hero-slide { width: 94%; }
+  .hero-slide.pos-left,
+  .hero-slide.pos-right,
+  .hero-slide.pos-hidden-left,
+  .hero-slide.pos-hidden-right {
+    transform: translate(-50%, -50%) scale(0.7);
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+@media (max-width: 700px) {
+  .hero {
+    min-height: 820px;
+    padding: 92px 14px 72px;
+  }
+  .hero-slides { height: 720px; }
+  .hero-slide { padding: 28px 22px; align-items: flex-start; overflow: hidden; }
+  .hero-title { font-size: clamp(42px, 15vw, 72px); }
+  .hero-visual { display: none; }
+  .hero-content { display: block; }
+  .hero-description { max-width: none; }
+  .hero-nav {
+    bottom: 86px;
+    width: calc(100% - 44px);
+  }
+  .hero-counter { display: none; }
+}
+
+/* ============================================================
+   MARQUEE / TICKER
+   ============================================================ */
+.marquee {
+  background: var(--orange);
+  color: var(--black);
+  overflow: hidden;
+  padding: 18px 0;
+  border-top: 1px solid var(--black);
+  border-bottom: 1px solid var(--black);
+  position: relative;
+  z-index: 2;
+}
+.marquee-track {
+  display: flex;
+  gap: 60px;
+  white-space: nowrap;
+  animation: marquee 40s linear infinite;
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+.marquee-track span {
+  display: flex;
+  align-items: center;
+  gap: 60px;
+  transform: skewX(-6deg);
+}
+.marquee-track .dot {
+  width: 14px; height: 14px;
+  background: var(--black);
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+
+/* ============================================================
+   SECTION SHARED
+   ============================================================ */
+section {
+  position: relative;
+  padding: 120px max(40px, 8vw);
+}
+@media (max-width: 768px) {
+  section { padding: 80px 20px; }
+}
+
+.section-header {
+  margin-bottom: 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.section-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.section-eyebrow::before {
+  content: '';
+  width: 30px;
+  height: 1px;
+  background: var(--orange);
+}
+.section-title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(40px, 6vw, 88px);
+  line-height: 0.9;
+  letter-spacing: 0;
+  color: var(--cream);
+  text-transform: uppercase;
+  transform: skewX(-6deg);
+  max-width: 800px;
+}
+.section-title .accent { color: var(--orange); }
+.section-link {
+  background: transparent;
+  border: 1.5px solid var(--cream);
+  color: var(--cream);
+  padding: 14px 28px;
+  font-family: var(--font-sub);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-link:hover {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: var(--black);
+}
+
+/* ============================================================
+   ABOUT / BRAND SECTION
+   ============================================================ */
+.about {
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(42, 112, 113, 0.15) 0%, transparent 60%),
+    var(--black);
+  position: relative;
+}
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+@media (max-width: 1024px) {
+  .about-grid { grid-template-columns: 1fr; gap: 50px; }
+}
+
+.about-text p {
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--cream);
+  margin-bottom: 24px;
+  font-weight: 300;
+}
+.about-text p strong {
+  color: var(--orange);
+  font-weight: 600;
+}
+
+.about-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--gray-1);
+  border: 1px solid var(--gray-1);
+  margin-top: 40px;
+}
+.stat {
+  background: var(--black);
+  padding: 32px 24px;
+  position: relative;
+}
+.stat .num {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 4vw, 56px);
+  font-style: italic;
+  color: var(--orange);
+  line-height: 1;
+  margin-bottom: 8px;
+  transform: skewX(-6deg);
+  display: inline-block;
+}
+.stat .label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--gray-3);
+}
+
+/* About Visual — limpio, sin overlays */
+.about-visual {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  background: #0a0a0a;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.18);
+}
+.kingfisher-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(1.05) contrast(1.02);
+}
+.about-visual-content {
+  position: absolute;
+  bottom: 24px; left: 24px; right: 24px;
+  z-index: 3;
+  background: rgba(10,10,10,0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 18px 22px;
+  border-left: 3px solid var(--orange);
+}
+.about-visual-content .label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 8px;
+}
+.about-visual-content .title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(20px, 2.4vw, 32px);
+  color: var(--cream);
+  line-height: 1;
+  transform: skewX(-6deg);
+  text-transform: uppercase;
+}
+.about-visual-grid { display: none; }
+
+/* ============================================================
+   STEM RACING SECTION
+   ============================================================ */
+.stem-section {
+  background: linear-gradient(180deg, var(--black) 0%, #0d0510 100%);
+  position: relative;
+  overflow: hidden;
+}
+.stem-section::before {
+  content: 'STEM RACING';
+  position: absolute;
+  top: -60px; left: -2%;
+  font-family: var(--font-display);
+  font-size: 24vw;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.025);
+  white-space: nowrap;
+  pointer-events: none;
+  transform: skewX(-6deg);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: 0;
+}
+
+.stem-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+@media (max-width: 1024px) {
+  .stem-grid { grid-template-columns: 1fr; }
+}
+
+.stem-content h3 {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 0.95;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  transform: skewX(-6deg);
+  color: var(--cream);
+  letter-spacing: 0;
+}
+.stem-content h3 .gradient {
+  background: linear-gradient(135deg, #ff2d8b 0%, #ff8a0e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.stem-content p {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--gray-3);
+  margin-bottom: 20px;
+  font-weight: 300;
+}
+.stem-features {
+  list-style: none;
+  margin-top: 32px;
+}
+.stem-features li {
+  padding: 16px 0;
+  border-top: 1px solid var(--gray-1);
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  font-family: var(--font-sub);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--cream);
+}
+.stem-features li:last-child { border-bottom: 1px solid var(--gray-1); }
+.stem-features li .num {
+  font-family: var(--font-mono);
+  color: var(--orange);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.stem-logo-display {
+  position: relative;
+  aspect-ratio: 1;
+  background: var(--black-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--gray-1);
+  overflow: hidden;
+}
+.stem-logo-display::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: transparent;
+}
+
+.stem-logo-graphic {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+.stem-logo-graphic .sr-mark {
+  font-family: var(--font-display);
+  font-size: clamp(120px, 18vw, 200px);
+  font-style: italic;
+  background: linear-gradient(135deg, #c91dab 0%, #6c1da3 30%, #ff2d8b 60%, #ff8a0e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  line-height: 0.85;
+  letter-spacing: 0;
+  display: block;
+  transform: skewX(-6deg);
+}
+.stem-logo-graphic .stem-text {
+  font-family: var(--font-sub);
+  font-weight: 800;
+  font-size: clamp(20px, 3vw, 36px);
+  color: var(--cream);
+  letter-spacing: 0.02em;
+  margin-top: 12px;
+  text-transform: uppercase;
+}
+.stem-logo-graphic .stem-sub {
+  font-family: var(--font-sub);
+  font-weight: 400;
+  font-size: clamp(11px, 1.4vw, 16px);
+  background: linear-gradient(90deg, #ff2d8b, #ff8a0e);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: 0.15em;
+  margin-top: 8px;
+  text-transform: uppercase;
+}
+
+.stem-corners span {
+  position: absolute;
+  width: 30px; height: 30px;
+  border-color: var(--orange);
+  border-style: solid;
+  border-width: 0;
+}
+.stem-corners span:nth-child(1) { top: 16px; left: 16px; border-top-width: 2px; border-left-width: 2px; }
+.stem-corners span:nth-child(2) { top: 16px; right: 16px; border-top-width: 2px; border-right-width: 2px; }
+.stem-corners span:nth-child(3) { bottom: 16px; left: 16px; border-bottom-width: 2px; border-left-width: 2px; }
+.stem-corners span:nth-child(4) { bottom: 16px; right: 16px; border-bottom-width: 2px; border-right-width: 2px; }
+
+/* ============================================================
+   IMPACT SECTION
+   ============================================================ */
+.impact-section {
+  background: var(--black);
+  position: relative;
+  overflow: hidden;
+}
+.impact-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+@media (max-width: 900px) {
+  .impact-cards { grid-template-columns: 1fr; }
+}
+
+.impact-card {
+  background: var(--black-card);
+  padding: 40px 32px;
+  position: relative;
+  border: 1px solid var(--gray-1);
+  transition: all 0.5s var(--ease-out-expo);
+  overflow: hidden;
+  cursor: pointer;
+}
+.impact-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 4px;
+  background: var(--orange);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s var(--ease-out-expo);
+}
+.impact-card::after {
+  content: attr(data-num);
+  position: absolute;
+  top: 20px; right: 20px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gray-2);
+  letter-spacing: 0.2em;
+}
+.impact-card:hover {
+  border-color: var(--orange);
+  transform: translateY(-6px);
+}
+.impact-card:hover::before { transform: scaleX(1); }
+
+.impact-icon {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 28px;
+  color: var(--orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.impact-card h4 {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 28px;
+  line-height: 1;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  transform: skewX(-6deg);
+  color: var(--cream);
+  letter-spacing: 0;
+}
+.impact-card p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--gray-3);
+  font-weight: 300;
+}
+
+/* ============================================================
+   CAR SHOWCASE
+   ============================================================ */
+.car-showcase {
+  background: linear-gradient(180deg, var(--black) 0%, #1a0d00 50%, var(--black) 100%);
+  position: relative;
+  overflow: hidden;
+}
+.car-showcase::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1200px; height: 1200px;
+  background: radial-gradient(circle, rgba(227, 121, 3, 0.12) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.car-display {
+  position: relative;
+  text-align: center;
+  max-width: 1100px;
+  margin: 0 auto 34px;
+}
+.car-display svg {
+  max-width: 90vw;
+  width: 1000px;
+  filter: drop-shadow(0 30px 60px rgba(227, 121, 3, 0.25));
+  animation: floatCar 5s ease-in-out infinite;
+}
+.car-photo-wrap {
+  position: relative;
+  overflow: hidden;
+  background: #050505;
+  border: 1px solid rgba(227, 121, 3, 0.3);
+  box-shadow: 0 28px 70px rgba(0,0,0,0.3);
+}
+.car-photo {
+  width: 100%;
+  aspect-ratio: 16 / 8.5;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(1.04) contrast(1.04);
+  animation: floatCar 5s ease-in-out infinite;
+}
+.car-photo-badge {
+  position: absolute;
+  left: clamp(18px, 3vw, 34px);
+  bottom: clamp(18px, 3vw, 34px);
+  background: var(--orange);
+  color: var(--black);
+  padding: 12px 18px;
+  font-family: var(--font-logo);
+  font-style: italic;
+  font-size: clamp(20px, 3vw, 42px);
+  text-transform: uppercase;
+  transform: skewX(-6deg);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.28);
+}
+.car-private-note {
+  max-width: 820px;
+  margin: 28px auto 0;
+  color: var(--gray-3);
+  text-align: center;
+  font-family: var(--font-sub);
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.car-specs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--gray-1);
+  border: 1px solid var(--gray-1);
+}
+@media (max-width: 768px) {
+  .car-specs { grid-template-columns: 1fr 1fr; }
+}
+.spec {
+  background: var(--black);
+  padding: 32px 24px;
+  text-align: center;
+  position: relative;
+}
+.spec::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: var(--orange);
+  transition: width 0.4s var(--ease-out-expo);
+}
+.spec:hover::before { width: 60%; }
+.spec .label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--gray-3);
+  margin-bottom: 12px;
+}
+.spec .value {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(28px, 3vw, 42px);
+  color: var(--cream);
+  line-height: 1;
+  transform: skewX(-6deg);
+  display: inline-block;
+}
+.spec .unit {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--orange);
+  margin-left: 4px;
+}
+
+/* ============================================================
+   BLOG / FEED SECTION
+   ============================================================ */
+.feed-section {
+  background:
+    linear-gradient(180deg, var(--black-soft) 0%, var(--black) 100%);
+  position: relative;
+}
+
+.feed-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+@media (max-width: 1024px) {
+  .feed-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 700px) {
+  .feed-grid { grid-template-columns: 1fr; }
+}
+
+.post-card {
+  background: var(--black-card);
+  border: 1px solid var(--gray-1);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.4s var(--ease-out-expo);
+  display: flex;
+  flex-direction: column;
+}
+.post-card:hover {
+  border-color: var(--orange);
+  transform: translateY(-6px);
+}
+.post-card:hover .post-cover img,
+.post-card:hover .post-cover-fallback {
+  transform: scale(1.05);
+}
+
+.post-cover {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  position: relative;
+  background: var(--gray-1);
+}
+.post-cover img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s var(--ease-out-expo);
+}
+.post-cover-fallback {
+  width: 100%; height: 100%;
+  background: linear-gradient(135deg, var(--teal-deep) 0%, var(--black) 50%, var(--orange) 200%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cream);
+  font-family: var(--font-display);
+  font-size: 80px;
+  font-style: italic;
+  transform: skewX(-6deg) scale(1);
+  transition: transform 0.6s var(--ease-out-expo);
+  opacity: 0.4;
+}
+
+.post-tag {
+  position: absolute;
+  top: 16px; left: 16px;
+  background: var(--orange);
+  color: var(--black);
+  padding: 6px 12px;
+  font-family: var(--font-sub);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  z-index: 2;
+}
+
+.post-body {
+  padding: 28px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.post-date {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gray-3);
+  margin-bottom: 14px;
+}
+.post-title {
+  font-family: var(--font-sub);
+  font-weight: 800;
+  font-size: 22px;
+  line-height: 1.15;
+  color: var(--cream);
+  margin-bottom: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+.post-excerpt {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--gray-3);
+  font-weight: 300;
+  margin-bottom: 20px;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.post-read-more {
+  font-family: var(--font-sub);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  transition: gap 0.3s;
+}
+.post-card:hover .post-read-more { gap: 14px; }
+
+.post-empty {
+  grid-column: 1 / -1;
+  padding: 80px 40px;
+  text-align: center;
+  border: 1px dashed var(--gray-2);
+  color: var(--gray-3);
+}
+.post-empty h3 {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 36px;
+  color: var(--cream);
+  margin-bottom: 16px;
+  transform: skewX(-6deg);
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   PARTNERS SECTION
+   ============================================================ */
+.partners-section {
+  background: var(--black);
+  border-top: 1px solid var(--gray-1);
+}
+
+.partners-row {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 60px;
+  align-items: center;
+  padding: 40px 0;
+  border-bottom: 1px solid var(--gray-1);
+}
+.partners-row:last-child { border-bottom: none; }
+@media (max-width: 768px) {
+  .partners-row { grid-template-columns: 1fr; gap: 24px; }
+}
+
+.partners-row-label {
+  font-family: var(--font-sub);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gray-3);
+}
+
+.partners-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: center;
+}
+.partners-grid.title-row { gap: 40px; }
+.partners-equal-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+@media (max-width: 1024px) {
+  .partners-equal-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 680px) {
+  .partners-equal-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* ============================================================
+   PARTNERS WALL — estilo F1 / Oracle (con tiers)
+   ============================================================ */
+.partners-wall {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.partners-tier-block {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.partners-tier-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  justify-content: center;
+}
+.partners-tier-divider .line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+}
+.partners-tier-divider .lbl {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.partners-tier {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  gap: 12px;
+}
+.tier-title { grid-template-columns: 1fr; }
+.tier-principal { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.tier-oficial { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.tier-aliados { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 720px; margin: 0 auto; }
+@media (max-width: 1024px) {
+  .tier-principal { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .tier-oficial { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .tier-principal,
+  .tier-oficial { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tier-aliados { grid-template-columns: 1fr; }
+}
+
+.partner-logo {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 18px 22px;
+  cursor: pointer;
+  transition: all 0.35s var(--ease-out-expo);
+  width: 100%;
+  min-height: 78px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.partner-logo:hover {
+  border-color: rgba(227,121,3,0.6);
+  background: rgba(227,121,3,0.06);
+  transform: translateY(-2px);
+}
+.partner-logo .plogo {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 900;
+  font-size: 18px;
+  letter-spacing: 0.02em;
+  color: rgba(255,255,255,0.92);
+  text-transform: uppercase;
+  transform: skewX(-6deg);
+  display: inline-block;
+  white-space: nowrap;
+}
+.partner-logo.mega {
+  min-height: 200px;
+  border-color: var(--orange);
+  background: rgba(227,121,3,0.04);
+  padding: 24px;
+}
+.partner-logo.mega .plogo {
+  font-size: clamp(40px, 6vw, 76px);
+  background: linear-gradient(90deg, #ffffff, #ffffff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  letter-spacing: 0.04em;
+}
+.partner-logo.mega:hover {
+  background: rgba(227,121,3,0.1);
+  transform: translateY(-3px);
+}
+.partner-ipisa-img {
+  width: clamp(120px, 14vw, 170px);
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 8px 22px rgba(0,0,0,0.4));
+}
+.partner-logo.small { min-height: 60px; }
+.partner-logo.small .plogo { font-size: 14px; }
+
+/* Variaciones por marca para que cada logo no se vea idéntico */
+.plogo-ipisa { font-family: var(--font-display); }
+.plogo-banreservas { color: #FFD400 !important; }
+.plogo-popular { color: #009BDE !important; }
+.plogo-brugal { color: #E03A3E !important; font-style: italic; }
+.plogo-claro { color: #DA291C !important; font-family: var(--font-display); }
+.plogo-presidente { color: #FFD400 !important; }
+
+/* Mantener compatibilidad con .partner-card antiguo si quedó referenciado */
+.partner-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--gray-1);
+  padding: 24px 32px;
+  cursor: pointer;
+  transition: all 0.4s var(--ease-out-expo);
+  min-width: 160px;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-sub);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--cream);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.partner-card.title-partner {
+  min-width: 220px;
+  min-height: 110px;
+  font-size: 18px;
+  border-color: var(--orange);
+}
+.partner-card.principal {
+  min-width: 180px;
+  min-height: 100px;
+  font-size: 16px;
+}
+.partner-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--orange) 0%, var(--teal) 100%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 0;
+}
+.partner-card:hover::before { opacity: 1; }
+.partner-card:hover {
+  color: var(--black);
+  border-color: var(--orange);
+  transform: translateY(-3px);
+}
+.partner-card span {
+  position: relative;
+  z-index: 1;
+  font-style: italic;
+  transform: skewX(-4deg);
+  display: inline-block;
+}
+
+/* ============================================================
+   CTA / NEWSLETTER ZONE
+   ============================================================ */
+.cta-section {
+  background: var(--orange);
+  color: var(--black);
+  position: relative;
+  overflow: hidden;
+}
+.cta-section::before {
+  content: 'SPEED BOLT • SPEED BOLT • SPEED BOLT • ';
+  position: absolute;
+  bottom: -20px;
+  left: 0;
+  right: 0;
+  font-family: var(--font-display);
+  font-size: clamp(80px, 15vw, 220px);
+  font-style: italic;
+  color: rgba(0, 0, 0, 0.06);
+  white-space: nowrap;
+  pointer-events: none;
+  font-weight: 900;
+  line-height: 0.85;
+  letter-spacing: 0;
+}
+
+.cta-content {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+@media (max-width: 900px) {
+  .cta-content { grid-template-columns: 1fr; }
+}
+.cta-title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(40px, 6vw, 88px);
+  line-height: 0.9;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--black);
+  transform: skewX(-6deg);
+}
+.cta-subtitle {
+  font-family: var(--font-sub);
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 0.04em;
+  margin-top: 24px;
+  color: var(--black);
+  max-width: 400px;
+  text-transform: uppercase;
+}
+.cta-button-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+}
+.cta-btn {
+  background: var(--black);
+  color: var(--orange);
+  padding: 22px 40px;
+  font-family: var(--font-sub);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  clip-path: polygon(6% 0, 100% 0, 94% 100%, 0 100%);
+  padding: 22px 44px;
+  transition: all 0.3s var(--ease-out-expo);
+}
+.cta-btn:hover {
+  background: var(--cream);
+  color: var(--black);
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer {
+  background: #050505;
+  padding: 80px max(40px, 8vw) 40px;
+  border-top: 1px solid var(--gray-1);
+  position: relative;
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 60px;
+  margin-bottom: 60px;
+}
+@media (max-width: 900px) {
+  .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+}
+@media (max-width: 600px) {
+  .footer-top { grid-template-columns: 1fr; }
+}
+
+.footer-logo-img {
+  width: min(100%, 220px);
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 4px 16px rgba(227,121,3,0.25));
+}
+.footer-brand p {
+  margin-top: 20px;
+  color: var(--gray-3);
+  font-size: 14px;
+  line-height: 1.6;
+  font-weight: 300;
+  max-width: 320px;
+}
+
+.footer-col h5 {
+  font-family: var(--font-sub);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 24px;
+}
+.footer-col ul {
+  list-style: none;
+}
+.footer-col ul li {
+  margin-bottom: 12px;
+}
+.footer-col ul a {
+  color: var(--cream);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s, padding 0.3s;
+  display: inline-block;
+}
+.footer-col ul a:hover { color: var(--orange); padding-left: 6px; }
+
+.footer-bottom {
+  border-top: 1px solid var(--gray-1);
+  padding-top: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gray-3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.footer-bottom a { color: var(--gray-3); text-decoration: none; }
+.footer-bottom a:hover { color: var(--orange); }
+
+/* ============================================================
+   MODAL — POST DETAIL
+   ============================================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.modal-overlay.open { display: flex; opacity: 1; }
+.modal {
+  background: var(--black-soft);
+  border: 1px solid var(--gray-1);
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  transform: translateY(20px);
+  transition: transform 0.4s var(--ease-out-expo);
+}
+.modal-overlay.open .modal { transform: translateY(0); }
+.modal-cover {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--gray-1);
+  position: relative;
+}
+.modal-cover img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.modal-cover-fallback {
+  width: 100%; height: 100%;
+  background: linear-gradient(135deg, var(--teal-deep) 0%, var(--black) 50%, var(--orange) 200%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 120px;
+  font-style: italic;
+  color: rgba(245, 241, 232, 0.3);
+  transform: skewX(-6deg);
+}
+.modal-close {
+  position: absolute;
+  top: 20px; right: 20px;
+  background: var(--black);
+  color: var(--cream);
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--gray-1);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  z-index: 5;
+}
+.modal-close:hover { background: var(--orange); color: var(--black); }
+.modal-body {
+  padding: 40px;
+}
+@media (max-width: 600px) {
+  .modal-body { padding: 24px; }
+}
+.modal-tag {
+  display: inline-block;
+  background: var(--orange);
+  color: var(--black);
+  padding: 6px 12px;
+  font-family: var(--font-sub);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.modal-date {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gray-3);
+  margin-bottom: 16px;
+}
+.modal-title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--cream);
+  margin-bottom: 24px;
+  transform: skewX(-6deg);
+  letter-spacing: 0;
+}
+.modal-content {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--cream);
+  font-weight: 300;
+  white-space: pre-wrap;
+  margin-bottom: 32px;
+}
+.modal-attachment {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 24px;
+  background: var(--black-card);
+  border: 1px solid var(--orange);
+  color: var(--cream);
+  text-decoration: none;
+  font-family: var(--font-sub);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: all 0.3s;
+}
+.modal-attachment:hover {
+  background: var(--orange);
+  color: var(--black);
+}
+.modal-attachment .icon {
+  width: 20px; height: 20px;
+}
+
+/* ============================================================
+   PARTNER MODAL
+   ============================================================ */
+.partner-modal {
+  background: var(--black-soft);
+  border: 1px solid var(--gray-1);
+  width: 100%;
+  max-width: 600px;
+  position: relative;
+  transform: translateY(20px);
+  transition: transform 0.4s var(--ease-out-expo);
+}
+.modal-overlay.open .partner-modal { transform: translateY(0); }
+.partner-modal-header {
+  background: linear-gradient(135deg, var(--orange) 0%, var(--teal) 100%);
+  padding: 60px 40px;
+  text-align: center;
+  position: relative;
+}
+.partner-modal-name {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(32px, 5vw, 56px);
+  color: var(--black);
+  text-transform: uppercase;
+  transform: skewX(-6deg);
+  letter-spacing: 0;
+  line-height: 0.95;
+}
+.partner-modal-body {
+  padding: 32px 40px 40px;
+}
+.partner-modal-tier {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 16px;
+}
+.partner-modal-desc {
+  color: var(--cream);
+  font-size: 15px;
+  line-height: 1.7;
+  margin-bottom: 28px;
+  font-weight: 300;
+}
+.partner-modal-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 28px;
+  background: var(--orange);
+  color: var(--black);
+  text-decoration: none;
+  font-family: var(--font-sub);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition: all 0.3s;
+  clip-path: polygon(6% 0, 100% 0, 94% 100%, 0 100%);
+  padding: 14px 32px;
+}
+.partner-modal-link:hover {
+  background: var(--cream);
+}
+
+/* ============================================================
+   ADMIN PANEL
+   ============================================================ */
+#admin-section {
+  display: none;
+  background: var(--black);
+  min-height: 100vh;
+  padding: 100px max(40px, 8vw) 80px;
+}
+#admin-section.active { display: block; }
+#main-site.hidden { display: none; }
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--gray-1);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.admin-title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(32px, 5vw, 56px);
+  text-transform: uppercase;
+  color: var(--cream);
+  transform: skewX(-6deg);
+}
+.admin-title .accent { color: var(--orange); }
+.admin-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.admin-login {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 60px 0;
+  text-align: center;
+}
+.admin-login h2 {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 56px;
+  text-transform: uppercase;
+  color: var(--cream);
+  transform: skewX(-6deg);
+  margin-bottom: 16px;
+}
+.admin-login p {
+  color: var(--gray-3);
+  margin-bottom: 32px;
+  font-size: 14px;
+}
+.admin-login input {
+  width: 100%;
+  padding: 18px 20px;
+  background: var(--black-card);
+  border: 1px solid var(--gray-1);
+  color: var(--cream);
+  font-family: var(--font-sub);
+  font-size: 15px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+.admin-login input:focus { border-color: var(--orange); }
+.admin-login button {
+  width: 100%;
+  padding: 18px;
+  background: var(--orange);
+  color: var(--black);
+  border: none;
+  font-family: var(--font-sub);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.admin-login button:hover { background: var(--cream); }
+.admin-login .hint {
+  margin-top: 24px;
+  padding: 14px;
+  background: var(--black-card);
+  border: 1px solid var(--gray-1);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gray-3);
+  letter-spacing: 0.1em;
+}
+.admin-login .hint code {
+  color: var(--orange);
+  background: rgba(227, 121, 3, 0.1);
+  padding: 2px 6px;
+}
+
+.admin-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 32px;
+  border-bottom: 1px solid var(--gray-1);
+}
+.admin-tab {
+  background: transparent;
+  border: none;
+  color: var(--gray-3);
+  padding: 16px 24px;
+  font-family: var(--font-sub);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.3s;
+}
+.admin-tab.active { color: var(--cream); }
+.admin-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 0; right: 0;
+  height: 2px;
+  background: var(--orange);
+}
+
+.admin-pane { display: none; }
+.admin-pane.active { display: block; }
+
+.admin-form {
+  background: var(--black-card);
+  border: 1px solid var(--gray-1);
+  padding: 32px;
+  margin-bottom: 32px;
+}
+.admin-form h3 {
+  font-family: var(--font-sub);
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 24px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+.form-group label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gray-3);
+  margin-bottom: 10px;
+}
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 14px 16px;
+  background: var(--black);
+  border: 1px solid var(--gray-1);
+  color: var(--cream);
+  font-family: var(--font-body);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus { border-color: var(--orange); }
+.form-group textarea {
+  min-height: 140px;
+  resize: vertical;
+  font-family: var(--font-body);
+  line-height: 1.6;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+@media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+
+.file-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.file-input-btn {
+  background: var(--gray-1);
+  color: var(--cream);
+  padding: 12px 20px;
+  font-family: var(--font-sub);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border: 1px solid var(--gray-2);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.file-input-btn:hover {
+  background: var(--orange);
+  color: var(--black);
+  border-color: var(--orange);
+}
+.file-input-name {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gray-3);
+  word-break: break-all;
+  flex: 1;
+}
+.file-preview-img {
+  max-width: 200px;
+  max-height: 120px;
+  object-fit: cover;
+  border: 1px solid var(--gray-1);
+  margin-top: 12px;
+  display: block;
+}
+
+.admin-form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+.btn-save {
+  background: var(--orange);
+  color: var(--black);
+  padding: 14px 28px;
+  font-family: var(--font-sub);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.btn-save:hover { background: var(--cream); }
+
+.btn-cancel {
+  background: transparent;
+  color: var(--cream);
+  padding: 14px 28px;
+  font-family: var(--font-sub);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border: 1px solid var(--gray-1);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.btn-cancel:hover { border-color: var(--cream); }
+
+.admin-list {
+  display: grid;
+  gap: 12px;
+}
+.admin-item {
+  display: grid;
+  grid-template-columns: 100px 1fr auto;
+  gap: 20px;
+  align-items: center;
+  background: var(--black-card);
+  border: 1px solid var(--gray-1);
+  padding: 16px;
+  transition: border-color 0.3s;
+}
+.admin-item:hover { border-color: var(--gray-2); }
+@media (max-width: 700px) {
+  .admin-item { grid-template-columns: 1fr; }
+}
+.admin-item-cover {
+  width: 100px; height: 70px;
+  background: var(--gray-1);
+  overflow: hidden;
+  border-radius: 2px;
+}
+.admin-item-cover img { width: 100%; height: 100%; object-fit: cover; }
+.admin-item-cover-fallback {
+  width: 100%; height: 100%;
+  background: linear-gradient(135deg, var(--teal-deep), var(--orange));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.5);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 24px;
+}
+.admin-item-info h4 {
+  font-family: var(--font-sub);
+  font-weight: 800;
+  font-size: 16px;
+  text-transform: uppercase;
+  color: var(--cream);
+  margin-bottom: 6px;
+  letter-spacing: 0;
+}
+.admin-item-info .meta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--gray-3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.admin-item-info .meta .tag-pill {
+  background: var(--orange);
+  color: var(--black);
+  padding: 2px 8px;
+  margin-right: 8px;
+  font-weight: 700;
+}
+.admin-item-actions {
+  display: flex;
+  gap: 8px;
+}
+.btn-icon {
+  background: transparent;
+  border: 1px solid var(--gray-1);
+  color: var(--cream);
+  padding: 8px 12px;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: all 0.3s;
+}
+.btn-icon:hover { background: var(--orange); color: var(--black); border-color: var(--orange); }
+.btn-icon.danger:hover { background: #d23939; color: var(--cream); border-color: #d23939; }
+
+/* ============================================================
+   ANIMATIONS / SCROLL REVEAL
+   ============================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 1s var(--ease-out-expo), transform 1s var(--ease-out-expo);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: var(--cream);
+  color: var(--black);
+  padding: 16px 24px;
+  font-family: var(--font-sub);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  z-index: 9000;
+  border-left: 4px solid var(--orange);
+  transform: translateX(120%);
+  transition: transform 0.4s var(--ease-out-expo);
+  max-width: 360px;
+}
+.toast.show { transform: translateX(0); }
+.toast.error { border-left-color: #d23939; }
+
+/* ============================================================
+   BRAND / IDENTITY SECTION
+   ============================================================ */
+.brand-section {
+  background: #fff;
+  border-top: 1px solid rgba(0,0,0,0.07);
+}
+.brand-section .section-title { color: var(--black); }
+.brand-section .section-eyebrow { color: var(--orange); }
+.brand-section-sub {
+  color: #777;
+  font-size: 13px;
+  font-family: var(--font-body);
+  max-width: 420px;
+  line-height: 1.7;
+  margin-top: 1rem;
+  font-weight: 300;
+}
+.brand-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.brand-card {
+  background: #0a0a0a;
+  border: none;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  padding: clamp(2.5rem, 5vw, 4.5rem) clamp(1.5rem, 3vw, 3rem);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  position: relative;
+  transition: box-shadow 0.25s, background 0.2s;
+  min-height: 200px;
+  text-align: center;
+  outline: none;
+  color: var(--cream);
+}
+.brand-card:last-child { border-right: none; }
+.brand-card:hover { background: #131313; }
+.brand-card.active { box-shadow: inset 0 0 0 2px var(--orange); }
+.brand-card-subtitle {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(245,241,232,0.6);
+  text-align: center;
+}
+.brand-card-arrow {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 1rem;
+  font-size: 9px;
+  color: rgba(245,241,232,0.4);
+  transition: color 0.25s;
+  user-select: none;
+}
+.brand-card.active .brand-card-arrow { color: var(--orange); }
+/* Speed Bolt wordmark */
+.brand-logo-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 110px;
+}
+.sb-logo-img {
+  width: min(100%, 260px);
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 8px 22px rgba(0,0,0,0.5));
+}
+/* Tarjeta dark — para mostrar logo blanco/naranja */
+.brand-card.brand-card-dark {
+  background: #0a0a0a;
+  color: var(--cream);
+}
+.brand-card.brand-card-dark .brand-card-subtitle {
+  color: rgba(245, 241, 232, 0.5);
+}
+.brand-card.brand-card-dark:hover { background: #131313; }
+.brand-card.brand-card-dark.active { box-shadow: inset 0 0 0 2px var(--orange); }
+.brand-card.brand-card-dark .brand-card-arrow { color: rgba(245,241,232,0.4); }
+
+/* STEM Racing logo real */
+.stem-logo-img-real {
+  width: min(100%, 240px);
+  height: auto;
+  display: block;
+}
+/* Panel oscuro detrás del logo de STEM Racing — el logo trae texto blanco
+   "STEM RACING" que se vuelve invisible sobre fondos claros, así que lo
+   mostramos siempre sobre un fondo oscuro para preservar la marca original. */
+.stem-logo-dark-panel {
+  background: #0a0a0a;
+  padding: 20px 24px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.stem-logo-real-big {
+  width: min(100%, 680px);
+  height: auto;
+  filter: drop-shadow(0 8px 30px rgba(200, 26, 130, 0.2));
+}
+/* IPISA logo real — círculo Salesianos */
+.ipisa-logo-img-real {
+  width: min(100%, 170px);
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 6px 16px rgba(0, 48, 135, 0.18));
+}
+
+/* IPISA text mark (placeholder estilizado) */
+.ipisa-text-mark {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-height: 110px;
+  justify-content: center;
+}
+.ipisa-letters {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(2.6rem, 5vw, 3.8rem);
+  font-weight: 900;
+  color: #003087;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.ipisa-tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(0,48,135,0.6);
+}
+.partners-equal-grid .partner-card {
+  min-width: 0;
+  min-height: 92px;
+  font-size: 14px;
+}
+.sb-logo-wordmark {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-style: italic;
+  font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+  text-transform: uppercase;
+  line-height: 1;
+  letter-spacing: 0;
+}
+.sb-speed { color: #0a0a0a; }
+.sb-bolt { color: var(--orange); }
+.sb-logo-line {
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #2a7071, #e37903);
+  margin-top: 0.55rem;
+  opacity: 0.75;
+}
+/* IPISA badge */
+.ipisa-badge-svg { width: clamp(80px, 11vw, 115px); height: auto; }
+.ipisa-logo-img {
+  width: clamp(88px, 12vw, 128px);
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 8px 18px rgba(0,0,0,0.12));
+}
+/* STEM Racing logo */
+.stem-brand-mark {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(2.8rem, 5.5vw, 4.5rem);
+  font-weight: 900;
+  background: linear-gradient(135deg, #7B2FBE 0%, #E91E8C 40%, #FF6000 75%, #FFB800 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  line-height: 0.85;
+  letter-spacing: 0;
+  display: block;
+}
+.stem-brand-text {
+  font-family: var(--font-sub);
+  font-weight: 800;
+  font-size: clamp(0.65rem, 1.3vw, 0.95rem);
+  color: #0a0a0a;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  margin-top: 0.35rem;
+}
+.stem-brand-sub {
+  font-family: var(--font-sub);
+  font-weight: 400;
+  font-size: clamp(0.5rem, 0.9vw, 0.68rem);
+  background: linear-gradient(90deg, #7B2FBE, #FF6000);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-top: 0.2rem;
+}
+/* Brand info panel */
+.brand-panel {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.42s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-top: none;
+}
+.brand-panel.open { max-height: 280px; }
+.brand-panel-inner {
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  background: #fafafa;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+.brand-panel-top {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.brand-panel-accent { width: 24px; height: 2px; flex-shrink: 0; }
+.brand-panel-name {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+.brand-panel-text {
+  font-size: 13.5px;
+  color: #2a2a2a;
+  line-height: 1.85;
+  font-family: var(--font-sub);
+  max-width: 700px;
+  font-weight: 400;
+}
+.brand-panel-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-bottom: 1px solid;
+  padding-bottom: 2px;
+  width: fit-content;
+  transition: opacity 0.2s;
+}
+.brand-panel-link:hover { opacity: 0.65; }
+/* Palette */
+.brand-palette { margin-top: 4rem; }
+.palette-strip { display: flex; height: 8px; gap: 3px; }
+.palette-strip > div { border-radius: 2px; }
+.palette-labels { display: flex; gap: 3px; margin-top: 0.75rem; }
+.palette-labels > div {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #bbb;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@media (max-width: 768px) {
+  .brand-grid { grid-template-columns: 1fr; }
+  .brand-card { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .brand-card:last-child { border-bottom: none; }
+  .brand-panel.open { max-height: 520px; }
+}
+
+/* ============================================================
+   MYSTERY CAR — HERO SLIDE 1 VISUAL
+   ============================================================ */
+.mystery-visual {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+.mystery-box {
+  position: relative;
+  width: clamp(260px, 48%, 460px);
+  aspect-ratio: 2.2/1;
+  border: 1px solid rgba(227,121,3,0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: rgba(10,10,10,0.85);
+  overflow: visible;
+}
+.mystery-box::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 12px,
+    rgba(227,121,3,0.04) 12px,
+    rgba(227,121,3,0.04) 24px
+  );
+}
+.mystery-box::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--orange);
+}
+.mystery-classified {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.45em;
+  color: var(--orange);
+  text-transform: uppercase;
+  position: relative;
+  z-index: 1;
+}
+.mystery-model {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(2.4rem, 5vw, 4.2rem);
+  color: var(--cream);
+  line-height: 1;
+  letter-spacing: 0;
+  transform: skewX(-6deg);
+  position: relative;
+  z-index: 1;
+}
+.mystery-question {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.2rem, 2.5vw, 2rem);
+  color: rgba(227,121,3,0.55);
+  position: relative;
+  z-index: 1;
+  letter-spacing: 0.1em;
+}
+.mystery-right-lines {
+  position: absolute;
+  right: -2.8rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.mrl {
+  height: 2px;
+  background: var(--orange);
+  animation: mrlAnim 2.2s ease-in-out infinite;
+}
+.mrl:nth-child(1) { width: 44px; animation-delay: 0s; }
+.mrl:nth-child(2) { width: 64px; animation-delay: 0.18s; opacity: 0.55; }
+.mrl:nth-child(3) { width: 32px; animation-delay: 0.36s; opacity: 0.35; }
+@keyframes mrlAnim {
+  0%, 100% { transform: translateX(4px); }
+  50% { transform: translateX(-10px); }
+}
+.mystery-meta {
+  display: flex;
+  gap: 28px;
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gray-3);
+}
+.mystery-meta-col { text-align: center; }
+.mystery-meta-col span {
+  display: block;
+  color: rgba(227,121,3,0.65);
+  margin-top: 4px;
+  font-size: 9px;
+}
+
+/* ============================================================
+   ALTERNANCIA DE SECCIONES — light/dark con divisores
+   ============================================================ */
+
+/* About — DARK, deja brillar al martín pescador */
+.about {
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(42, 112, 113, 0.18) 0%, transparent 60%),
+    var(--black);
+  border-top: 4px solid var(--orange);
+  position: relative;
+}
+.about::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--orange) 50%, transparent);
+  opacity: 0.5;
+}
+
+/* STEM — LIGHT */
+.stem-section {
+  background: #fafafa;
+  border-top: 1px solid rgba(0,0,0,0.07);
+  position: relative;
+}
+.stem-section::before { color: rgba(0,0,0,0.03); }
+.stem-section .section-title { color: var(--black); }
+.stem-section .section-eyebrow { color: var(--orange); }
+.stem-content h3 { color: var(--black); }
+.stem-content p { color: #555; }
+.stem-features li { color: var(--black); border-color: rgba(0,0,0,0.1); }
+.stem-features li:last-child { border-color: rgba(0,0,0,0.1); }
+.stem-logo-display { background: #ffffff; border-color: rgba(0,0,0,0.08); }
+.stem-logo-display {
+  animation: stemGlow 4s ease-in-out infinite;
+}
+@keyframes stemGlow {
+  0%, 100% { box-shadow: 0 0 0px rgba(123,47,190,0); }
+  50% { box-shadow: 0 0 60px rgba(123,47,190,0.25), inset 0 0 40px rgba(233,30,140,0.12); }
+}
+
+/* Impact — DARK */
+.impact-section {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(227, 121, 3, 0.12) 0%, transparent 60%),
+    var(--black);
+  border-top: 4px solid var(--orange);
+  position: relative;
+}
+.impact-section .section-title { color: var(--cream); }
+.impact-section .section-eyebrow { color: var(--orange); }
+.impact-card {
+  background: var(--black-card);
+  border-color: var(--gray-1);
+}
+.impact-card:hover { border-color: var(--orange); }
+.impact-card h4 { color: var(--cream); }
+.impact-card p { color: var(--gray-3); }
+.impact-card::after { color: var(--gray-2); }
+
+/* Feed — LIGHT */
+.feed-section {
+  background: #fff;
+  border-top: 1px solid rgba(0,0,0,0.07);
+  position: relative;
+}
+.feed-section .section-title { color: var(--black); }
+.feed-section .section-eyebrow { color: var(--orange); }
+.feed-section .section-link { color: var(--black); border-color: rgba(0,0,0,0.3); }
+.feed-section .section-link:hover { background: var(--orange); border-color: var(--orange); color: var(--black); }
+.post-card { background: #fff; border-color: rgba(0,0,0,0.1); }
+.post-card:hover { border-color: var(--orange); }
+.post-title { color: var(--black); }
+.post-excerpt { color: #555; }
+.post-date { color: #aaa; }
+.post-read-more { color: var(--orange); }
+.post-empty { border-color: rgba(0,0,0,0.1); }
+.post-empty h3 { color: var(--black); }
+.post-empty { color: #aaa; }
+
+/* Car showcase — divisor superior */
+.car-showcase { border-top: 4px solid var(--orange); }
+
+/* Partners — DARK estilo F1/Oracle wall */
+.partners-section {
+  background: #050a18;
+  border-top: 4px solid var(--orange);
+  position: relative;
+}
+.partners-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(227,121,3,0.08), transparent 50%),
+    radial-gradient(circle at 80% 100%, rgba(42,112,113,0.1), transparent 50%);
+  pointer-events: none;
+}
+.partners-section > * { position: relative; z-index: 1; }
+.partners-section .section-title { color: var(--cream); }
+.partners-section .section-eyebrow { color: var(--orange); }
+.partners-row { border-color: rgba(255,255,255,0.08); }
+.partners-row-label { color: rgba(255,255,255,0.4); }
+</style>
+</head>
+<body>
+
+<!-- GRAIN OVERLAY -->
+<div class="grain"></div>
+
+<!-- CUSTOM CURSOR -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- PRELOADER -->
+<div class="preloader" id="preloader">
+  <div class="preloader-meta">
+    <span>SB · 2026</span>
+    <span>LOADING</span>
+  </div>
+  <img class="preloader-logo-img" src="assets/speedbolt-logo.png" alt="Speed Bolt"/>
+  <div class="preloader-bar"></div>
+  <div class="preloader-meta">
+    <span>STEM RACING</span>
+    <span>DOM. REPUBLIC</span>
+  </div>
+</div>
+
+<!-- ============================================================
+     MAIN SITE
+     ============================================================ -->
+<div id="main-site">
+
+<!-- NAVIGATION -->
+<nav class="nav" id="nav">
+  <a href="#hero" class="nav-logo" data-cursor="hover" aria-label="Speed Bolt">
+    <img src="assets/speedbolt-logo.png" alt="Speed Bolt"/>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#brand" data-cursor="hover">Marca</a></li>
+    <li><a href="#about" data-cursor="hover">Equipo</a></li>
+    <li><a href="#stem" data-cursor="hover">STEM Racing</a></li>
+    <li><a href="#car" data-cursor="hover">El Carro</a></li>
+    <li><a href="#feed" data-cursor="hover">Transmisiones</a></li>
+    <li><a href="#partners" data-cursor="hover">Patrocinadores</a></li>
+    <li><a href="#admin" class="nav-cta" id="navAdminBtn" data-cursor="hover">Admin</a></li>
+  </ul>
+  <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="nav-mobile-menu" id="mobileMenu">
+  <a href="#about" data-cursor="hover">Equipo</a>
+  <a href="#stem" data-cursor="hover">STEM Racing</a>
+  <a href="#car" data-cursor="hover">El Carro</a>
+  <a href="#feed" data-cursor="hover">Transmisiones</a>
+  <a href="#partners" data-cursor="hover">Patrocinadores</a>
+  <a href="#admin" data-cursor="hover">Admin</a>
+</div>
+
+<!-- ============================================================
+     HERO SLIDER
+     ============================================================ -->
+<section class="hero" id="hero">
+  <div class="hero-slides">
+
+    <!-- SLIDE 1: SPEED BOLT BRAND -->
+    <div class="hero-slide slide-1 active" data-slide="0">
+      <div class="hero-content">
+        <div class="hero-text-block">
+          <div class="hero-meta">EQUIPO 01 · TEMPORADA 2026</div>
+          <h1 class="hero-title">
+            <span class="accent">SPEED</span><br>
+            <span class="stroke">BOLT</span><br>
+            <span>RACING</span>
+          </h1>
+          <p class="hero-description">
+            No somos solo otro equipo. Somos ingeniería pura, velocidad pensada y diseño obsesivo. Speed Bolt nació en República Dominicana para empujar los límites de lo que un equipo estudiantil puede construir.
+          </p>
+          <div class="hero-actions">
+            <a href="#about" class="btn-primary" data-cursor="hover">
+              <span>Conoce al equipo</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"/></svg>
+            </a>
+            <a href="#car" class="btn-secondary" data-cursor="hover">Ver SpeedBolt-00</a>
+          </div>
+        </div>
+        <div class="hero-visual hero-visual-1">
+          <!-- MYSTERY CAR — SpeedBolt-00 CLASIFICADO -->
+          <div class="mystery-visual">
+            <div class="mystery-box">
+              <div class="mystery-classified">— clasificado —</div>
+              <div class="mystery-model">SpeedBolt-00</div>
+              <div class="mystery-question">? ? ?</div>
+              <div class="mystery-right-lines">
+                <div class="mrl"></div>
+                <div class="mrl"></div>
+                <div class="mrl"></div>
+              </div>
+            </div>
+            <div class="mystery-meta">
+              <div class="mystery-meta-col">FORMA<span>DESCONOCIDA</span></div>
+              <div class="mystery-meta-col">VELOCIDAD<span>CLASIFICADA</span></div>
+              <div class="mystery-meta-col">ESTADO<span>EN DISEÑO</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: STEM RACING -->
+    <div class="hero-slide slide-2" data-slide="1">
+      <div class="hero-content">
+        <div class="hero-text-block">
+          <div class="hero-meta">COMPETENCIA OFICIAL · DOMINICAN REPUBLIC</div>
+          <h1 class="hero-title">
+            <span class="accent">STEM</span><br>
+            <span class="stroke">RACING</span><br>
+            <span>2026</span>
+          </h1>
+          <p class="hero-description">
+            La competencia internacional de mini-bólidos donde estudiantes de todo el mundo diseñan, construyen y compiten con autos a escala. Speed Bolt representa la cantera dominicana en la próxima generación de ingeniería de motorsport.
+          </p>
+          <div class="hero-actions">
+            <a href="#stem" class="btn-primary" data-cursor="hover">
+              <span>Sobre la competencia</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="stem-logo">
+            <img src="assets/stemracing-logo.png" alt="STEM Racing Dominican Republic" class="stem-logo-real-hero"/>
+            <div class="stem-logo-tag">DOMINICAN REPUBLIC&trade;</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: IMPACT -->
+    <div class="hero-slide slide-3" data-slide="2">
+      <div class="hero-content">
+        <div class="hero-text-block">
+          <div class="hero-meta">IMPACTO · GENERACIÓN STEM</div>
+          <h1 class="hero-title">
+            <span>NO ES</span><br>
+            <span class="accent">SOLO</span><br>
+            <span class="stroke">UN AUTO.</span>
+          </h1>
+          <p class="hero-description">
+            Cada milímetro de SpeedBolt-00 representa horas de cálculos, pruebas aerodinámicas y noches sin dormir. Stem Racing no forma pilotos: forma la próxima generación de ingenieros, diseñadores y emprendedores que República Dominicana necesita.
+          </p>
+          <div class="hero-actions">
+            <a href="#impact" class="btn-primary" data-cursor="hover">
+              <span>Nuestro impacto</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="impact-numbers">
+            <div class="impact-number">
+              <div class="num">12+</div>
+              <div class="label">Países compitiendo</div>
+            </div>
+            <div class="impact-number">
+              <div class="num">40K</div>
+              <div class="label">Estudiantes globales</div>
+            </div>
+            <div class="impact-number">
+              <div class="num model-name">SpeedBolt-00</div>
+              <div class="label">Modelo actual</div>
+            </div>
+            <div class="impact-number">
+              <div class="num">2026</div>
+              <div class="label">Temporada activa</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: ENGINEERING -->
+    <div class="hero-slide slide-4" data-slide="3">
+      <div class="hero-content">
+        <div class="hero-text-block">
+          <div class="hero-meta">INGENIERÍA · DISEÑO · VELOCIDAD</div>
+          <h1 class="hero-title">
+            <span class="stroke">CADA</span><br>
+            <span class="accent">MILISEGUNDO</span><br>
+            <span>CUENTA.</span>
+          </h1>
+          <p class="hero-description">
+            En un mundo donde un milisegundo decide quién sube al podio, no podemos permitirnos diseños mediocres. Los datos reales de SpeedBolt-00 se mantienen reservados hasta su presentación oficial.
+          </p>
+          <div class="hero-actions">
+            <a href="#car" class="btn-primary" data-cursor="hover">
+              <span>Ver avance visual</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" style="width: 100%; max-width: 400px;">
+            <!-- Tachometer -->
+            <circle cx="200" cy="200" r="180" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+            <circle cx="200" cy="200" r="160" fill="none" stroke="#1a1a1a" stroke-width="40"/>
+            <path d="M 80 230 A 130 130 0 1 1 320 230" fill="none" stroke="url(#gaugeGrad)" stroke-width="6" stroke-linecap="round"/>
+            <defs>
+              <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#2a7071"/>
+                <stop offset="50%" stop-color="#e37903"/>
+                <stop offset="100%" stop-color="#d23939"/>
+              </linearGradient>
+            </defs>
+            <!-- Tick marks -->
+            <g stroke="#666" stroke-width="2">
+              <line x1="200" y1="40" x2="200" y2="55"/>
+              <line x1="60" y1="200" x2="75" y2="200"/>
+              <line x1="340" y1="200" x2="325" y2="200"/>
+              <line x1="100" y1="100" x2="110" y2="110"/>
+              <line x1="300" y1="100" x2="290" y2="110"/>
+            </g>
+            <!-- Needle -->
+            <line x1="200" y1="200" x2="280" y2="120" stroke="#e37903" stroke-width="3" stroke-linecap="round">
+              <animateTransform attributeName="transform" type="rotate" from="-30 200 200" to="30 200 200" dur="2s" repeatCount="indefinite" additive="sum"/>
+            </line>
+            <circle cx="200" cy="200" r="12" fill="#e37903"/>
+            <circle cx="200" cy="200" r="6" fill="#0a0a0a"/>
+            <!-- Center text -->
+            <text x="200" y="290" text-anchor="middle" font-family="Archivo Black, sans-serif" font-size="44" font-style="italic" fill="#f5f1e8">RPM</text>
+            <text x="200" y="320" text-anchor="middle" font-family="Space Mono, monospace" font-size="11" letter-spacing="3" fill="#888">SPEEDBOLT-00</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- HERO NAV -->
+  <div class="hero-nav">
+    <div class="hero-pagination" id="heroPagination">
+      <button class="pag-dot active" data-target="0" data-cursor="hover"></button>
+      <button class="pag-dot" data-target="1" data-cursor="hover"></button>
+      <button class="pag-dot" data-target="2" data-cursor="hover"></button>
+      <button class="pag-dot" data-target="3" data-cursor="hover"></button>
+    </div>
+    <div class="hero-counter">
+      <span class="current" id="slideCurrent">01</span> / <span>04</span>
+    </div>
+  </div>
+
+  <div class="hero-scroll-hint">
+    <span>SCROLL</span>
+    <span class="line"></span>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="marquee-track">
+    <span>SPEED BOLT <span class="dot"></span></span>
+    <span>STEM RACING DR <span class="dot"></span></span>
+    <span>SpeedBolt-00 <span class="dot"></span></span>
+    <span>TEMPORADA 2026 <span class="dot"></span></span>
+    <span>HECHO EN RD <span class="dot"></span></span>
+    <span>ENGINEERED FOR SPEED <span class="dot"></span></span>
+    <span>SPEED BOLT <span class="dot"></span></span>
+    <span>STEM RACING DR <span class="dot"></span></span>
+    <span>SpeedBolt-00 <span class="dot"></span></span>
+    <span>TEMPORADA 2026 <span class="dot"></span></span>
+    <span>HECHO EN RD <span class="dot"></span></span>
+    <span>ENGINEERED FOR SPEED <span class="dot"></span></span>
+  </div>
+</div>
+
+<!-- ============================================================
+     BRAND / IDENTITY SECTION
+     ============================================================ -->
+<section class="brand-section" id="brand">
+  <div style="max-width: 1400px; margin: 0 auto;">
+
+    <div class="section-header reveal" style="margin-bottom: 60px;">
+      <div>
+        <div class="section-eyebrow">00 · Identidad & aliados</div>
+        <h2 class="section-title" style="color: var(--black); transform: none;">Nuestra <span class="accent">Marca</span></h2>
+        <p class="brand-section-sub">Toca un logo para conocer más sobre cada parte de este proyecto.</p>
+      </div>
+    </div>
+
+    <!-- Logo grid -->
+    <div class="brand-grid reveal">
+
+      <!-- Speed Bolt -->
+      <button class="brand-card brand-card-dark" data-brand="speedbolt">
+        <div class="brand-logo-wrap">
+          <img class="sb-logo-img" src="assets/speedbolt-logo.png" alt="Logo Speed Bolt">
+        </div>
+        <div class="brand-card-subtitle">Escudería · IPISA · Santiago RD</div>
+        <div class="brand-card-arrow">▼</div>
+      </button>
+
+      <!-- IPISA -->
+      <button class="brand-card" data-brand="ipisa">
+        <div class="brand-logo-wrap">
+          <img class="ipisa-logo-img-real" src="assets/ipisa-logo.png" alt="Logo IPISA - Instituto Politécnico Industrial Salesianos Santiago">
+        </div>
+        <div class="brand-card-subtitle">Instituto Politécnico Industrial de Santiago</div>
+        <div class="brand-card-arrow">▼</div>
+      </button>
+
+      <!-- STEM Racing DR -->
+      <button class="brand-card" data-brand="stemracing">
+        <div class="brand-logo-wrap stem-logo-dark-panel">
+          <img class="stem-logo-img-real" src="assets/stemracing-logo.png" alt="Logo STEM Racing Dominican Republic">
+        </div>
+        <div class="brand-card-subtitle">República Dominicana · Competencia Nacional</div>
+        <div class="brand-card-arrow">▼</div>
+      </button>
+
+    </div>
+
+    <!-- Info panel -->
+    <div class="brand-panel" id="brandPanel">
+      <div class="brand-panel-inner" id="brandPanelInner"></div>
+    </div>
+
+    <!-- Color palette -->
+    <div class="brand-palette reveal">
+      <div class="palette-strip">
+        <div style="flex: 3; background: #e37903;"></div>
+        <div style="flex: 2; background: #2a7071;"></div>
+        <div style="flex: 1.5; background: #0a0a0a;"></div>
+        <div style="flex: 1.5; background: #003087;"></div>
+        <div style="flex: 1; background: #7B2FBE;"></div>
+      </div>
+      <div class="palette-labels">
+        <div style="flex: 3;">SB Orange</div>
+        <div style="flex: 2;">SB Teal</div>
+        <div style="flex: 1.5;">SB Black</div>
+        <div style="flex: 1.5;">IPISA Blue</div>
+        <div style="flex: 1;">STEM Purple</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     ABOUT / EQUIPO
+     ============================================================ -->
+<section class="about" id="about">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-eyebrow">01 · El equipo</div>
+      <h2 class="section-title">Bienvenidos<br>a <span class="accent">Speed Bolt</span></h2>
+    </div>
+    <a href="#stem" class="section-link" data-cursor="hover">
+      <span>Nuestra misión</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5"/></svg>
+    </a>
+  </div>
+
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>Somos un equipo dominicano que está cambiando lo que significa hacer ingeniería estudiantil en el Caribe. Nacidos del mismo espíritu que mueve a las grandes escuderías de la <strong>Fórmula 1</strong>, construimos cada componente de SpeedBolt-00 con la misma obsesión por el detalle, la aerodinámica y el rendimiento.</p>
+      <p>Speed Bolt no es solo un equipo de competencia. Es una declaración: que República Dominicana puede formar la próxima generación de ingenieros, diseñadores y estrategas que el motorsport global necesita. Que el talento existe, lo único que faltaba era la pista.</p>
+      <p>Inspirados por el <strong>martín pescador</strong> —un ave que combina precisión quirúrgica con velocidad explosiva— el naranja eléctrico y el teal profundo definen nuestra identidad visual, nuestra forma de competir y la energía que llevamos al taller cada día.</p>
+
+      <div class="about-stats">
+        <div class="stat">
+          <div class="num model-name">SpeedBolt-00</div>
+          <div class="label">Modelo actual</div>
+        </div>
+        <div class="stat">
+          <div class="num">2026</div>
+          <div class="label">Temporada</div>
+        </div>
+        <div class="stat">
+          <div class="num">100%</div>
+          <div class="label">Hecho en RD</div>
+        </div>
+        <div class="stat">
+          <div class="num">∞</div>
+          <div class="label">Combustible: pasión</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-visual reveal reveal-delay-2">
+      <img class="kingfisher-photo" src="assets/martin-pescador.jpg" alt="Martín pescador real">
+      <div class="about-visual-grid"></div>
+      <div class="about-visual-content">
+        <div class="label">Identidad visual · 2026</div>
+        <div class="title">Precisión<br>real del<br>martín<br>pescador.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     STEM RACING SECTION
+     ============================================================ -->
+<section class="stem-section" id="stem">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-eyebrow">02 · La competencia</div>
+      <h2 class="section-title">¿Qué es <span class="accent">STEM Racing</span>?</h2>
+    </div>
+  </div>
+
+  <div class="stem-grid">
+    <div class="stem-content reveal">
+      <h3>El <span class="gradient">campeonato global</span> de mini-bólidos.</h3>
+      <p>STEM Racing (anteriormente conocido como F1 in Schools) es la competencia internacional más prestigiosa donde estudiantes diseñan, fabrican y compiten con autos de carrera a escala impulsados por cartuchos de CO₂. Cada equipo es una mini-escudería: ingenieros, diseñadores, estrategas, especialistas de marketing y un piloto.</p>
+      <p>Los equipos compiten en pistas oficiales de <strong style="color: var(--orange);">20 metros</strong>, donde los autos alcanzan velocidades superiores a <strong style="color: var(--orange);">80 km/h</strong> y el cronómetro mide en milésimas. Ganar requiere perfección: aerodinámica, peso, ángulo de ataque, materiales, manufactura.</p>
+
+      <ul class="stem-features">
+        <li><span class="num">01</span> Diseño CAD profesional</li>
+        <li><span class="num">02</span> Análisis CFD y aerodinámica</li>
+        <li><span class="num">03</span> Manufactura CNC de alta precisión</li>
+        <li><span class="num">04</span> Pruebas en túnel de viento</li>
+        <li><span class="num">05</span> Estrategia de marca y patrocinios</li>
+        <li><span class="num">06</span> Presentación ante jurado internacional</li>
+      </ul>
+    </div>
+
+    <div class="stem-logo-display reveal reveal-delay-2">
+      <div class="stem-corners">
+        <span></span><span></span><span></span><span></span>
+      </div>
+      <div class="stem-logo-graphic">
+        <img class="stem-logo-real-big" src="assets/sr-logo.png" alt="SR — Speed Bolt STEM Racing"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     IMPACT SECTION
+     ============================================================ -->
+<section class="impact-section" id="impact">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-eyebrow">03 · Por qué importa</div>
+      <h2 class="section-title">Más allá<br>de la <span class="accent">pista</span></h2>
+    </div>
+  </div>
+
+  <div class="impact-cards">
+    <div class="impact-card reveal" data-num="01" data-cursor="hover">
+      <div class="impact-icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M2 17l10 5 10-5M2 12l10 5 10-5M12 2L2 7l10 5 10-5-10-5z"/>
+        </svg>
+      </div>
+      <h4>Educación STEM real</h4>
+      <p>Los estudiantes aplican física, matemáticas, ingeniería y diseño industrial a un proyecto real con consecuencias medibles. No es teoría: o el auto vuela, o pierde.</p>
+    </div>
+
+    <div class="impact-card reveal reveal-delay-1" data-num="02" data-cursor="hover">
+      <div class="impact-icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+        </svg>
+      </div>
+      <h4>Trabajo en equipo</h4>
+      <p>Cada miembro tiene un rol específico: piloto, ingeniero, diseñador, estratega de marca, mánager. Aprenden a ejecutar bajo presión, con plazos reales y métricas reales.</p>
+    </div>
+
+    <div class="impact-card reveal reveal-delay-2" data-num="03" data-cursor="hover">
+      <div class="impact-icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="2" y1="12" x2="22" y2="12"/>
+          <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+        </svg>
+      </div>
+      <h4>Visibilidad internacional</h4>
+      <p>Los equipos ganadores compiten contra escuderías de Europa, Asia, América. Es el escenario donde el talento dominicano se mide con el mundo —y suele sorprender.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CAR SHOWCASE — SpeedBolt-00
+     ============================================================ -->
+<section class="car-showcase" id="car">
+  <div class="section-header reveal" style="justify-content: center; text-align: center;">
+    <div>
+      <div class="section-eyebrow" style="justify-content: center;">04 · El bólido</div>
+      <h2 class="section-title">Conoce el <span class="accent">SpeedBolt-00</span></h2>
+    </div>
+  </div>
+
+  <div class="car-display reveal reveal-delay-1">
+    <div class="car-photo-wrap">
+      <img class="car-photo" src="assets/f1-car.png" alt="Carro real de Formula 1">
+      <div class="car-photo-badge">SpeedBolt-00</div>
+    </div>
+    <p class="car-private-note">El diseño y las especificaciones reales del carro se mantienen reservadas por el equipo. Por ahora solo presentamos la línea visual que inspira a SpeedBolt-00.</p>
+  </div>
+</section>
+
+<!-- ============================================================
+     FEED / BLOG SECTION
+     ============================================================ -->
+<section class="feed-section" id="feed">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-eyebrow">05 · Latest feed</div>
+      <h2 class="section-title">Últimas<br><span class="accent">transmisiones.</span></h2>
+    </div>
+    <button class="section-link" data-cursor="hover" id="feedLoadMore">
+      <span>Ir al feed completo</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M7 7h10v10" stroke="currentColor" stroke-width="2.5"/></svg>
+    </button>
+  </div>
+
+  <div class="feed-grid" id="feedGrid">
+    <!-- Posts get rendered here -->
+  </div>
+</section>
+
+<!-- ============================================================
+     PARTNERS SECTION
+     ============================================================ -->
+<section class="partners-section" id="partners">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-eyebrow">06 · Patrocinadores</div>
+      <h2 class="section-title">Quienes nos<br><span class="accent">impulsan</span></h2>
+    </div>
+  </div>
+
+  <div class="partners-wall">
+    <!-- Title partner -->
+    <div class="partners-tier-block reveal">
+      <div class="partners-tier tier-title">
+        <button class="partner-logo mega" data-cursor="hover" data-partner="ipisa">
+          <img class="partner-ipisa-img" src="assets/ipisa-logo.png" alt="IPISA - Instituto Politécnico Industrial Salesianos Santiago">
+        </button>
+      </div>
+    </div>
+
+    <!-- Principales -->
+    <div class="partners-tier-block reveal">
+      <div class="partners-tier tier-principal">
+        <button class="partner-logo" data-cursor="hover" data-partner="banreservas">
+          <span class="plogo plogo-banreservas">BANRESERVAS</span>
+        </button>
+        <button class="partner-logo" data-cursor="hover" data-partner="popular">
+          <span class="plogo plogo-popular">BANCO POPULAR</span>
+        </button>
+        <button class="partner-logo" data-cursor="hover" data-partner="brugal">
+          <span class="plogo plogo-brugal">BRUGAL</span>
+        </button>
+        <button class="partner-logo" data-cursor="hover" data-partner="claro">
+          <span class="plogo plogo-claro">CLARO</span>
+        </button>
+        <button class="partner-logo" data-cursor="hover" data-partner="presidente">
+          <span class="plogo plogo-presidente">PRESIDENTE</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Oficiales -->
+    <div class="partners-tier-block reveal">
+      <div class="partners-tier tier-oficial">
+        <button class="partner-logo" data-cursor="hover" data-partner="baldom">
+          <span class="plogo">BALDOM</span>
+        </button>
+        <button class="partner-logo" data-cursor="hover" data-partner="bonao">
+          <span class="plogo">INDUBAN</span>
+        </button>
+        <button class="partner-logo" data-cursor="hover" data-partner="cocacola">
+          <span class="plogo">REFRESCAS</span>
+        </button>
+        <button class="partner-logo" data-cursor="hover" data-partner="cnp">
+          <span class="plogo">CNP RD</span>
+        </button>
+        <button class="partner-logo" data-cursor="hover" data-partner="orange">
+          <span class="plogo">ORANGE</span>
+        </button>
+        <button class="partner-logo" data-cursor="hover" data-partner="autozona">
+          <span class="plogo">AUTOZONA</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Aliados -->
+    <div class="partners-tier-block reveal">
+      <div class="partners-tier tier-aliados">
+        <button class="partner-logo small" data-cursor="hover" data-partner="cesur">
+          <span class="plogo">CESUR</span>
+        </button>
+        <button class="partner-logo small" data-cursor="hover" data-partner="cuesta">
+          <span class="plogo">CUESTA TECH</span>
+        </button>
+        <button class="partner-logo small" data-cursor="hover" data-partner="cap">
+          <span class="plogo">CAP CANA</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CTA SECTION
+     ============================================================ -->
+<section class="cta-section">
+  <div class="cta-content">
+    <div class="reveal">
+      <h2 class="cta-title">Apoya<br>al equipo<br><span style="color: var(--cream);">SpeedBolt-00.</span></h2>
+      <p class="cta-subtitle">¿Quieres ser parte de la próxima generación de motorsport dominicano? Conviértete en patrocinador o sigue cada actualización del equipo.</p>
+    </div>
+    <div class="cta-button-wrap reveal reveal-delay-2">
+      <a href="#" class="cta-btn" data-cursor="hover" id="becomePartnerBtn">
+        <span>Convertirse en partner</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5"/></svg>
+      </a>
+      <a href="#feed" class="cta-btn" data-cursor="hover" style="background: transparent; color: var(--black); border: 2px solid var(--black);">
+        <span>Seguir transmisiones</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <img class="footer-logo-img" src="assets/speedbolt-logo.png" alt="Speed Bolt"/>
+      <p>Equipo dominicano de STEM Racing. Diseñamos, construimos y compitimos en la temporada 2026 representando a República Dominicana.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Equipo</h5>
+      <ul>
+        <li><a href="#about">Sobre nosotros</a></li>
+        <li><a href="#stem">Stem Racing</a></li>
+        <li><a href="#car">SpeedBolt-00</a></li>
+        <li><a href="#impact">Impacto</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Contenido</h5>
+      <ul>
+        <li><a href="#feed">Transmisiones</a></li>
+        <li><a href="#partners">Patrocinadores</a></li>
+        <li><a href="#admin">Admin</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Síguenos</h5>
+      <ul>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">YouTube</a></li>
+        <li><a href="#">TikTok</a></li>
+        <li><a href="#">LinkedIn</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 SPEED BOLT RACING · República Dominicana</div>
+    <div>SpeedBolt-00 · STEM RACING DR · ENGINEERED FOR SPEED</div>
+  </div>
+</footer>
+
+</div><!-- /main-site -->
+
+<!-- ============================================================
+     ADMIN SECTION
+     ============================================================ -->
+<div id="admin-section">
+
+  <!-- LOGIN -->
+  <div class="admin-login" id="adminLogin">
+    <h2>Admin <span style="color: var(--orange);">Access</span></h2>
+    <p>Ingresa la contraseña para administrar las publicaciones del feed.</p>
+    <input type="password" id="adminPassword" placeholder="Contraseña" autocomplete="off"/>
+    <button id="adminLoginBtn">Entrar</button>
+    <div class="hint">Demo password: <code>speedbolt2026</code></div>
+    <div style="margin-top: 24px;">
+      <a href="#hero" class="btn-secondary" data-cursor="hover" id="backToSiteFromLogin">← Volver al sitio</a>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="adminDashboard" style="display: none;">
+    <div class="admin-header">
+      <h1 class="admin-title">Speed Bolt <span class="accent">Admin.</span></h1>
+      <div class="admin-actions">
+        <a href="#hero" class="btn-cancel" data-cursor="hover" id="backToSite">← Ver sitio</a>
+        <button class="btn-save" id="adminLogoutBtn" data-cursor="hover">Cerrar sesión</button>
+      </div>
+    </div>
+
+    <div class="admin-tabs">
+      <button class="admin-tab active" data-tab="posts">Posts</button>
+      <button class="admin-tab" data-tab="new">Nueva Publicación</button>
+    </div>
+
+    <!-- POSTS LIST -->
+    <div class="admin-pane active" id="pane-posts">
+      <div id="adminPostsList" class="admin-list">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- NEW / EDIT FORM -->
+    <div class="admin-pane" id="pane-new">
+      <div class="admin-form">
+        <h3 id="formMode">Nueva publicación</h3>
+        <input type="hidden" id="postId" value=""/>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Título</label>
+            <input type="text" id="postTitle" placeholder="Ej. Primer boceto del chasis SpeedBolt-00"/>
+          </div>
+          <div class="form-group">
+            <label>Categoría / Tag</label>
+            <input type="text" id="postTag" placeholder="Ej. Ingeniería, Branding, Competencia" value="Equipo"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Imagen de portada obligatoria</label>
+          <div class="file-input-wrap">
+            <label for="postCover" class="file-input-btn" data-cursor="hover">Elegir imagen</label>
+            <input type="file" id="postCover" accept="image/*" style="display: none;"/>
+            <span class="file-input-name" id="coverFileName">Sin imagen seleccionada</span>
+          </div>
+          <img id="coverPreview" class="file-preview-img" style="display: none;" alt="Preview"/>
+        </div>
+
+        <div class="form-group">
+          <label>Descripción / Contenido</label>
+          <textarea id="postContent" placeholder="Escribe el contenido completo del post aquí..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Documento adjunto (PDF u otro)</label>
+          <div class="file-input-wrap">
+            <label for="postAttachment" class="file-input-btn" data-cursor="hover">Adjuntar documento</label>
+            <input type="file" id="postAttachment" accept=".pdf,.doc,.docx,.zip"/>
+            <span class="file-input-name" id="attachmentFileName">Sin archivo</span>
+            <button type="button" id="clearAttachment" class="btn-icon" style="display: none;">Quitar</button>
+          </div>
+        </div>
+
+        <div class="admin-form-actions">
+          <button class="btn-save" id="savePostBtn" data-cursor="hover">Publicar</button>
+          <button class="btn-cancel" id="cancelEditBtn" data-cursor="hover">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     POST DETAIL MODAL
+     ============================================================ -->
+<div class="modal-overlay" id="postModal">
+  <div class="modal">
+    <button class="modal-close" id="modalClose" data-cursor="hover">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"/></svg>
+    </button>
+    <div class="modal-cover" id="modalCover"></div>
+    <div class="modal-body">
+      <div id="modalTagWrap"></div>
+      <div class="modal-date" id="modalDate"></div>
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <div class="modal-content" id="modalContent"></div>
+      <div id="modalAttachmentWrap"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     PARTNER DETAIL MODAL
+     ============================================================ -->
+<div class="modal-overlay" id="partnerModal">
+  <div class="partner-modal">
+    <button class="modal-close" id="partnerModalClose" data-cursor="hover">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"/></svg>
+    </button>
+    <div class="partner-modal-header">
+      <div class="partner-modal-name" id="partnerModalName"></div>
+    </div>
+    <div class="partner-modal-body">
+      <div class="partner-modal-tier" id="partnerModalTier"></div>
+      <p class="partner-modal-desc" id="partnerModalDesc"></p>
+      <a id="partnerModalLink" class="partner-modal-link" target="_blank" rel="noopener" data-cursor="hover">
+        <span id="partnerModalLinkText">Visitar sitio oficial</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M7 7h10v10" stroke="currentColor" stroke-width="2.5"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   SPEED BOLT — APPLICATION LOGIC
+   ============================================================ */
+
+// =============== DATA ====================
+const PARTNERS = {
+  baldom: {
+    name: 'Baldom',
+    tier: 'Patrocinador',
+    desc: 'Marca dominicana líder en sazones y especias, parte fundamental de la cocina del Caribe. Su apoyo impulsa nuestra misión de llevar el talento dominicano a la pista global de STEM Racing.',
+    url: 'https://baldom.com.do'
+  },
+  brugal: {
+    name: 'Brugal',
+    tier: 'Patrocinador',
+    desc: 'Casa fundada en 1888, la ronería más reconocida del país. Su patrocinio refleja un compromiso histórico con la innovación y la excelencia dominicana.',
+    url: 'https://brugal.com.do'
+  },
+  banreservas: {
+    name: 'Banreservas',
+    tier: 'Patrocinador',
+    desc: 'El banco más grande de República Dominicana. Apoya el desarrollo del talento STEM como inversión directa en el futuro económico del país.',
+    url: 'https://www.banreservas.com'
+  },
+  claro: {
+    name: 'Claro RD',
+    tier: 'Patrocinador',
+    desc: 'Líder en telecomunicaciones del país, conecta al equipo Speed Bolt con la red más rápida de RD para transmisiones, telemetría y trabajo colaborativo en la nube.',
+    url: 'https://www.claro.com.do'
+  },
+  presidente: {
+    name: 'Colchones Yaque',
+    tier: 'Patrocinador',
+    desc: 'La cerveza orgullo nacional. Patrocinador oficial de eventos del equipo y experiencias para la comunidad de fans.',
+    url: 'https://colchonesyaque.com/'
+  },
+  bonao: {
+    name: 'Industrias Banilejas (INDUBAN)',
+    tier: 'Patrocinador',
+    desc: 'Pioneros del café dominicano de exportación. Combustible oficial de las largas jornadas de taller y simulación CFD del equipo.',
+    url: 'https://induban.com'
+  },
+  popular: {
+    name: 'Banco Popular Dominicano',
+    tier: 'Patrocinador',
+    desc: 'Líder en innovación bancaria del país. Apoya programas STEM y becas para jóvenes ingenieros dominicanos.',
+    url: 'https://www.popularenlinea.com'
+  },
+  cocacola: {
+    name: 'Refrescas Nacional',
+    tier: 'Patrocinador',
+    desc: 'Distribuidora oficial de bebidas para el equipo durante competencias y entrenamientos.',
+    url: '#'
+  },
+  cnp: {
+    name: 'CNP República Dominicana',
+    tier: 'Patrocinador',
+    desc: 'Cluster Nacional de Innovación. Soporte logístico y de redes profesionales para nuestros ingenieros emergentes.',
+    url: '#'
+  },
+  cesur: {
+    name: 'CESUR',
+    tier: 'Patrocinador',
+    desc: 'Centro de Excelencia Sur. Aliado académico en formación STEM para el equipo Speed Bolt.',
+    url: '#'
+  },
+  orange: {
+    name: 'Orange Dominicana',
+    tier: 'Patrocinador',
+    desc: 'Conectividad móvil y tecnología digital para el equipo. Patrocinador de la transformación digital del taller.',
+    url: '#'
+  },
+  ipisa: {
+    name: 'IPISA',
+    tier: 'Patrocinador',
+    desc: 'Instituto Politécnico Industrial de Santiago. Cuna histórica de ingenieros dominicanos y aliado educativo del equipo.',
+    url: 'https://ipisa.edu.do'
+  },
+  autozona: {
+    name: 'AutoZona RD',
+    tier: 'Patrocinador',
+    desc: 'Proveedor de componentes mecánicos y herramientas para el taller del equipo Speed Bolt.',
+    url: '#'
+  },
+  cuesta: {
+    name: 'Cuesta Tech',
+    tier: 'Patrocinador',
+    desc: 'Distribuidor oficial de equipos electrónicos, sensores y hardware de fabricación digital para SpeedBolt-00.',
+    url: '#'
+  },
+  cap: {
+    name: 'Cap Cana',
+    tier: 'Patrocinador',
+    desc: 'Resort y destino oficial de los retiros estratégicos del equipo. Patrocinador de hospitalidad VIP en eventos.',
+    url: 'https://capcana.com'
+  }
+};
+
+const PARTNER_CONTACT = {
+  name: 'Sé partner de Speed Bolt',
+  tier: 'Contacto oficial',
+  desc: 'Queremos construir alianzas que impulsen talento joven, ingeniería aplicada y representación dominicana en STEM Racing. Para conversar sobre patrocinios o colaboraciones, contáctanos al (809) 724-5700 o escribe a info@ipisa.edu.do.',
+  url: 'mailto:info@ipisa.edu.do',
+  linkLabel: 'Escribir por correo'
+};
+
+const SAMPLE_POSTS = [
+  {
+    id: 'sample-1',
+    title: 'Identidad visual revelada',
+    tag: 'Branding',
+    excerpt: '¡La espera terminó! Presentamos oficialmente la identidad visual de Speed Bolt. El naranja eléctrico y el teal del martín pescador definen nuestro lenguaje.',
+    content: '¡La espera terminó! Presentamos oficialmente la identidad visual de Speed Bolt.\n\nEl naranja eléctrico (#e37903) y el teal del martín pescador (#2a7071) definen nuestro lenguaje visual. Estos colores no son aleatorios: están inspirados en una de las aves más rápidas y precisas del planeta, capaz de detectar a su presa bajo el agua y atacar con velocidad quirúrgica.\n\nLa tipografía F1-style fue elegida para representar movimiento, agresividad y precisión técnica. Cada elemento del sistema visual está diseñado para escalar desde un sticker hasta una vela de barco.\n\nEl logotipo combina líneas dinámicas que sugieren velocidad, con la silueta inconfundible de un monoplaza. El "Bolt" en naranja simboliza la chispa, el rayo, la decisión instantánea que marca la diferencia entre subir al podio o perderlo todo.',
+    cover: 'assets/speedbolt-logo.png',
+    coverFallback: 'IV',
+    attachment: null,
+    date: '10 de abril de 2026'
+  },
+  {
+    id: 'sample-2',
+    title: 'Primer adelanto de SpeedBolt-00',
+    tag: 'Ingeniería',
+    excerpt: 'El equipo ya trabaja en SpeedBolt-00, pero los detalles técnicos se mantienen reservados hasta el momento oficial de presentación.',
+    content: 'El equipo ya trabaja en SpeedBolt-00, pero los detalles técnicos se mantienen reservados hasta el momento oficial de presentación.\n\nPor ahora podemos contar que el proceso combina investigación, diseño, pruebas internas y muchas horas de taller. Queremos mostrar la energía del proyecto sin adelantar datos que todavía no deben publicarse.\n\nCuando llegue el momento, el equipo compartirá la evolución del carro con una presentación clara y bien cuidada. Hasta entonces, SpeedBolt-00 sigue en desarrollo.',
+    cover: 'assets/f1-car.jpg',
+    coverFallback: 'SB',
+    attachment: null,
+    date: '15 de abril de 2026'
+  },
+  {
+    id: 'sample-3',
+    title: 'Bienvenidos a la temporada 2026',
+    tag: 'Equipo',
+    excerpt: 'Después de meses de preparación, oficialmente arrancamos la temporada 2026 de STEM Racing. Speed Bolt está listo para competir.',
+    content: 'Después de meses de preparación, organización del equipo y planificación estratégica, oficialmente arrancamos la temporada 2026 de STEM Racing. Speed Bolt está listo para competir.\n\nEste año el equipo cuenta con seis miembros oficiales: piloto, ingeniero de diseño, ingeniero de manufactura, manager de equipo, especialista de marca y estratega de patrocinios. Cada uno con responsabilidades específicas y objetivos medibles.\n\nNuestro objetivo no es solamente clasificar para la final regional. Vamos por el podio nacional, con la mira puesta en representar a República Dominicana en la final mundial. Sabemos que el camino es duro, pero también sabemos algo más importante: tenemos el talento, tenemos el equipo, y tenemos las ganas.\n\n¡Bienvenidos a la era Speed Bolt!',
+    cover: 'assets/martin-pescador.jpg',
+    coverFallback: 'SB',
+    attachment: null,
+    date: '5 de mayo de 2026'
+  }
+];
+
+const POST_COVER_POOL = [
+  'assets/speedbolt-logo.png',
+  'assets/f1-car.jpg',
+  'assets/martin-pescador.jpg'
+];
+
+// =============== STATE ====================
+let posts = [];
+let isAdmin = false;
+const ADMIN_PASSWORD = 'speedbolt2026';
+
+// =============== STORAGE ====================
+async function loadPosts() {
+  try {
+    const result = await window.storage.get('speedbolt-posts', true);
+    if (result && result.value) {
+      posts = JSON.parse(result.value);
+    } else {
+      posts = SAMPLE_POSTS;
+      await savePosts();
+    }
+  } catch (err) {
+    posts = SAMPLE_POSTS;
+  }
+  posts = posts.map((post, index) => ({
+    ...post,
+    cover: post.cover || POST_COVER_POOL[index % POST_COVER_POOL.length]
+  }));
+  renderFeed();
+  renderAdminList();
+}
+
+async function savePosts() {
+  try {
+    await window.storage.set('speedbolt-posts', JSON.stringify(posts), true);
+  } catch (err) {
+    console.error('Save failed:', err);
+    showToast('Error guardando datos', 'error');
+  }
+}
+
+// =============== TOAST ====================
+function showToast(message, type) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.className = 'toast show' + (type === 'error' ? ' error' : '');
+  setTimeout(() => toast.className = 'toast', 3500);
+}
+
+// =============== PRELOADER ====================
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('preloader').classList.add('done');
+  }, 1700);
+});
+
+// =============== CUSTOM CURSOR ====================
+const cursorDot = document.getElementById('cursorDot');
+const cursorRing = document.getElementById('cursorRing');
+let mouseX = 0, mouseY = 0;
+let ringX = 0, ringY = 0;
+
+window.addEventListener('mousemove', (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  cursorDot.style.left = mouseX + 'px';
+  cursorDot.style.top = mouseY + 'px';
+});
+function animateRing() {
+  ringX += (mouseX - ringX) * 0.18;
+  ringY += (mouseY - ringY) * 0.18;
+  cursorRing.style.left = ringX + 'px';
+  cursorRing.style.top = ringY + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+document.addEventListener('mouseover', (e) => {
+  const el = e.target.closest('[data-cursor="hover"], button, a, input, textarea');
+  if (el) cursorRing.classList.add('hover');
+});
+document.addEventListener('mouseout', (e) => {
+  const el = e.target.closest('[data-cursor="hover"], button, a, input, textarea');
+  if (el) cursorRing.classList.remove('hover');
+});
+
+// =============== NAV ====================
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 60) nav.classList.add('scrolled');
+  else nav.classList.remove('scrolled');
+});
+
+// Mobile menu
+const mobileToggle = document.getElementById('mobileToggle');
+const mobileMenu = document.getElementById('mobileMenu');
+mobileToggle.addEventListener('click', () => {
+  mobileMenu.classList.toggle('open');
+});
+mobileMenu.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => mobileMenu.classList.remove('open'));
+});
+
+// =============== HERO SLIDER (3D coverflow / ruleta) ====================
+const slides = document.querySelectorAll('.hero-slide');
+const dots = document.querySelectorAll('.pag-dot');
+const slideCurrent = document.getElementById('slideCurrent');
+let currentSlide = 0;
+let slideInterval;
+const SLIDE_DURATION = 6000;
+
+function applySlidePositions() {
+  const total = slides.length;
+  const leftIdx = (currentSlide - 1 + total) % total;
+  const rightIdx = (currentSlide + 1) % total;
+
+  slides.forEach((slide, i) => {
+    slide.classList.remove(
+      'pos-center', 'pos-left', 'pos-right',
+      'pos-hidden-left', 'pos-hidden-right', 'active'
+    );
+    if (i === currentSlide) {
+      slide.classList.add('pos-center', 'active');
+    } else if (i === leftIdx) {
+      slide.classList.add('pos-left');
+    } else if (i === rightIdx) {
+      slide.classList.add('pos-right');
+    } else {
+      // Resto: ocultos. El siguiente que entrará por la derecha
+      // queda en pos-hidden-right (escondido detrás-derecha).
+      const distRight = (i - currentSlide + total) % total;
+      const distLeft = (currentSlide - i + total) % total;
+      if (distRight <= distLeft) {
+        slide.classList.add('pos-hidden-right');
+      } else {
+        slide.classList.add('pos-hidden-left');
+      }
+    }
+  });
+}
+
+function goToSlide(index) {
+  dots[currentSlide].classList.remove('active');
+  currentSlide = ((index % slides.length) + slides.length) % slides.length;
+  dots[currentSlide].classList.add('active');
+  slideCurrent.textContent = String(currentSlide + 1).padStart(2, '0');
+  applySlidePositions();
+}
+
+function nextSlide() {
+  goToSlide(currentSlide + 1);
+}
+function prevSlide() {
+  goToSlide(currentSlide - 1);
+}
+
+function startSlider() {
+  clearInterval(slideInterval);
+  slideInterval = setInterval(nextSlide, SLIDE_DURATION);
+}
+
+dots.forEach(dot => {
+  dot.addEventListener('click', () => {
+    goToSlide(parseInt(dot.dataset.target));
+    startSlider();
+  });
+});
+
+// Click en los slides laterales para navegar
+slides.forEach((slide, i) => {
+  slide.addEventListener('click', (e) => {
+    if (slide.classList.contains('pos-left')) {
+      e.preventDefault();
+      prevSlide();
+      startSlider();
+    } else if (slide.classList.contains('pos-right')) {
+      e.preventDefault();
+      nextSlide();
+      startSlider();
+    }
+  });
+});
+
+// Estado inicial
+applySlidePositions();
+startSlider();
+
+// =============== SCROLL REVEAL ====================
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// =============== FEED RENDERING ====================
+function renderFeed() {
+  const grid = document.getElementById('feedGrid');
+  if (!posts.length) {
+    grid.innerHTML = '<div class="post-empty"><h3>Aún no hay transmisiones</h3><p>Pronto vas a ver las novedades del equipo aquí.</p></div>';
+    return;
+  }
+  // sort by date descending (most recent first - assuming order maintained, newest unshifted)
+  grid.innerHTML = posts.map(p => `
+    <article class="post-card" data-id="${p.id}" data-cursor="hover">
+      <div class="post-cover">
+        <div class="post-tag">${escapeHtml(p.tag)}</div>
+        ${p.cover ? `<img src="${p.cover}" alt="${escapeHtml(p.title)}"/>` : `<div class="post-cover-fallback">${escapeHtml(p.coverFallback || 'SB')}</div>`}
+      </div>
+      <div class="post-body">
+        <div class="post-date">${escapeHtml(p.date)}</div>
+        <h3 class="post-title">${escapeHtml(p.title)}</h3>
+        <p class="post-excerpt">${escapeHtml(p.excerpt || (p.content || '').slice(0, 140))}</p>
+        <span class="post-read-more">Leer más
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5"/></svg>
+        </span>
+      </div>
+    </article>
+  `).join('');
+
+  grid.querySelectorAll('.post-card').forEach(card => {
+    card.addEventListener('click', () => openPostModal(card.dataset.id));
+  });
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+// =============== POST MODAL ====================
+const postModal = document.getElementById('postModal');
+function openPostModal(id) {
+  const post = posts.find(p => p.id === id);
+  if (!post) return;
+
+  document.getElementById('modalCover').innerHTML = post.cover
+    ? `<img src="${post.cover}" alt="${escapeHtml(post.title)}"/>`
+    : `<div class="modal-cover-fallback">${escapeHtml(post.coverFallback || 'SB')}</div>`;
+
+  document.getElementById('modalTagWrap').innerHTML = `<span class="modal-tag">${escapeHtml(post.tag)}</span>`;
+  document.getElementById('modalDate').textContent = post.date;
+  document.getElementById('modalTitle').textContent = post.title;
+  document.getElementById('modalContent').textContent = post.content;
+
+  const attachmentWrap = document.getElementById('modalAttachmentWrap');
+  if (post.attachment && post.attachment.data) {
+    attachmentWrap.innerHTML = `
+      <a href="${post.attachment.data}" download="${escapeHtml(post.attachment.name)}" class="modal-attachment" data-cursor="hover">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        <span>Descargar ${escapeHtml(post.attachment.name)}</span>
+      </a>`;
+  } else {
+    attachmentWrap.innerHTML = '';
+  }
+  postModal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+document.getElementById('modalClose').addEventListener('click', closePostModal);
+postModal.addEventListener('click', (e) => {
+  if (e.target === postModal) closePostModal();
+});
+function closePostModal() {
+  postModal.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// =============== PARTNER MODAL ====================
+const partnerModal = document.getElementById('partnerModal');
+function openPartnerModal(data) {
+  if (!data) return;
+  document.getElementById('partnerModalName').textContent = data.name;
+  document.getElementById('partnerModalTier').textContent = data.tier;
+  document.getElementById('partnerModalDesc').textContent = data.desc;
+  document.getElementById('partnerModalLink').href = data.url;
+  document.getElementById('partnerModalLinkText').textContent = data.linkLabel || 'Visitar sitio oficial';
+  partnerModal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+document.querySelectorAll('.partner-card, .partner-logo').forEach(card => {
+  card.addEventListener('click', () => {
+    const key = card.dataset.partner;
+    if (key && PARTNERS[key]) openPartnerModal(PARTNERS[key]);
+  });
+});
+document.getElementById('becomePartnerBtn').addEventListener('click', (e) => {
+  e.preventDefault();
+  openPartnerModal(PARTNER_CONTACT);
+});
+document.getElementById('partnerModalClose').addEventListener('click', closePartnerModal);
+partnerModal.addEventListener('click', (e) => {
+  if (e.target === partnerModal) closePartnerModal();
+});
+function closePartnerModal() {
+  partnerModal.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Escape closes any modal
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closePostModal();
+    closePartnerModal();
+  }
+});
+
+// =============== ADMIN ROUTING ====================
+function checkAdminRoute() {
+  const hash = window.location.hash;
+  const mainSite = document.getElementById('main-site');
+  const adminSection = document.getElementById('admin-section');
+  if (hash === '#admin') {
+    mainSite.classList.add('hidden');
+    adminSection.classList.add('active');
+    if (isAdmin) {
+      document.getElementById('adminLogin').style.display = 'none';
+      document.getElementById('adminDashboard').style.display = 'block';
+    } else {
+      document.getElementById('adminLogin').style.display = 'block';
+      document.getElementById('adminDashboard').style.display = 'none';
+    }
+    window.scrollTo(0, 0);
+  } else {
+    mainSite.classList.remove('hidden');
+    adminSection.classList.remove('active');
+  }
+}
+window.addEventListener('hashchange', checkAdminRoute);
+checkAdminRoute();
+
+// Login
+document.getElementById('adminLoginBtn').addEventListener('click', adminLogin);
+document.getElementById('adminPassword').addEventListener('keyup', (e) => {
+  if (e.key === 'Enter') adminLogin();
+});
+function adminLogin() {
+  const pass = document.getElementById('adminPassword').value;
+  if (pass === ADMIN_PASSWORD) {
+    isAdmin = true;
+    document.getElementById('adminLogin').style.display = 'none';
+    document.getElementById('adminDashboard').style.display = 'block';
+    showToast('Bienvenido, admin');
+    renderAdminList();
+  } else {
+    showToast('Contraseña incorrecta', 'error');
+    document.getElementById('adminPassword').value = '';
+  }
+}
+
+document.getElementById('adminLogoutBtn').addEventListener('click', () => {
+  isAdmin = false;
+  document.getElementById('adminLogin').style.display = 'block';
+  document.getElementById('adminDashboard').style.display = 'none';
+  document.getElementById('adminPassword').value = '';
+  showToast('Sesión cerrada');
+});
+
+// =============== ADMIN TABS ====================
+document.querySelectorAll('.admin-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.admin-pane').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('pane-' + tab.dataset.tab).classList.add('active');
+    if (tab.dataset.tab === 'new') {
+      // Reset form when manually navigating to new
+      if (!document.getElementById('postId').value) resetForm();
+    }
+  });
+});
+
+// =============== ADMIN POST LIST ====================
+function renderAdminList() {
+  const list = document.getElementById('adminPostsList');
+  if (!posts.length) {
+    list.innerHTML = '<div style="padding: 40px; text-align: center; color: var(--gray-3); border: 1px dashed var(--gray-1);">No hay publicaciones aún. Crea la primera.</div>';
+    return;
+  }
+  list.innerHTML = posts.map(p => `
+    <div class="admin-item" data-id="${p.id}">
+      <div class="admin-item-cover">
+        ${p.cover ? `<img src="${p.cover}" alt=""/>` : `<div class="admin-item-cover-fallback">${escapeHtml(p.coverFallback || 'SB')}</div>`}
+      </div>
+      <div class="admin-item-info">
+        <h4>${escapeHtml(p.title)}</h4>
+        <div class="meta"><span class="tag-pill">${escapeHtml(p.tag)}</span> ${escapeHtml(p.date)}${p.attachment ? ' · 📎 Adjunto' : ''}</div>
+      </div>
+      <div class="admin-item-actions">
+        <button class="btn-icon edit-post" data-id="${p.id}" data-cursor="hover">Editar</button>
+        <button class="btn-icon danger delete-post" data-id="${p.id}" data-cursor="hover">Borrar</button>
+      </div>
+    </div>
+  `).join('');
+
+  list.querySelectorAll('.edit-post').forEach(btn => {
+    btn.addEventListener('click', () => editPost(btn.dataset.id));
+  });
+  list.querySelectorAll('.delete-post').forEach(btn => {
+    btn.addEventListener('click', () => deletePost(btn.dataset.id));
+  });
+}
+
+// =============== POST FORM ====================
+let coverDataURL = null;
+let attachmentData = null; // {data, name}
+
+document.getElementById('postCover').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    coverDataURL = ev.target.result;
+    document.getElementById('coverFileName').textContent = file.name;
+    const preview = document.getElementById('coverPreview');
+    preview.src = coverDataURL;
+    preview.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+});
+
+document.getElementById('postAttachment').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    attachmentData = { data: ev.target.result, name: file.name };
+    document.getElementById('attachmentFileName').textContent = file.name;
+    document.getElementById('clearAttachment').style.display = 'inline-block';
+  };
+  reader.readAsDataURL(file);
+});
+
+document.getElementById('clearAttachment').addEventListener('click', () => {
+  attachmentData = null;
+  document.getElementById('postAttachment').value = '';
+  document.getElementById('attachmentFileName').textContent = 'Sin archivo';
+  document.getElementById('clearAttachment').style.display = 'none';
+});
+
+document.getElementById('savePostBtn').addEventListener('click', savePost);
+document.getElementById('cancelEditBtn').addEventListener('click', () => {
+  resetForm();
+  // switch back to posts tab
+  document.querySelector('.admin-tab[data-tab="posts"]').click();
+});
+
+async function savePost() {
+  const title = document.getElementById('postTitle').value.trim();
+  const tag = document.getElementById('postTag').value.trim() || 'Equipo';
+  const content = document.getElementById('postContent').value.trim();
+  const id = document.getElementById('postId').value;
+  const existingPost = id ? posts.find(p => p.id === id) : null;
+
+  if (!title) { showToast('El título es obligatorio', 'error'); return; }
+  if (!content) { showToast('El contenido es obligatorio', 'error'); return; }
+  if (!coverDataURL && !existingPost?.cover) { showToast('La imagen de portada es obligatoria', 'error'); return; }
+
+  const now = new Date();
+  const months = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  const dateStr = `${now.getDate()} de ${months[now.getMonth()]} de ${now.getFullYear()}`;
+
+  if (id) {
+    // editing
+    const idx = posts.findIndex(p => p.id === id);
+    if (idx >= 0) {
+      const existing = posts[idx];
+      posts[idx] = {
+        ...existing,
+        title, tag, content,
+        excerpt: content.slice(0, 160),
+        cover: coverDataURL !== null ? coverDataURL : existing.cover,
+        coverFallback: existing.coverFallback || (title.match(/\b\w/g) || []).slice(0, 2).join('').toUpperCase(),
+        attachment: attachmentData !== null ? attachmentData : existing.attachment
+      };
+      showToast('Publicación actualizada');
+    }
+  } else {
+    // new
+    const newPost = {
+      id: 'post-' + Date.now(),
+      title, tag, content,
+      excerpt: content.slice(0, 160),
+      cover: coverDataURL,
+      coverFallback: (title.match(/\b\w/g) || []).slice(0, 2).join('').toUpperCase() || 'SB',
+      attachment: attachmentData,
+      date: dateStr
+    };
+    posts.unshift(newPost);
+    showToast('Publicación creada');
+  }
+  await savePosts();
+  renderFeed();
+  renderAdminList();
+  resetForm();
+  document.querySelector('.admin-tab[data-tab="posts"]').click();
+}
+
+function editPost(id) {
+  const p = posts.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('formMode').textContent = 'Editar publicación';
+  document.getElementById('postId').value = p.id;
+  document.getElementById('postTitle').value = p.title;
+  document.getElementById('postTag').value = p.tag;
+  document.getElementById('postContent').value = p.content;
+  coverDataURL = null; // null means "keep existing"
+  attachmentData = null;
+  if (p.cover) {
+    document.getElementById('coverFileName').textContent = 'Imagen actual (se mantiene)';
+    const preview = document.getElementById('coverPreview');
+    preview.src = p.cover;
+    preview.style.display = 'block';
+  } else {
+    document.getElementById('coverFileName').textContent = 'Sin imagen seleccionada';
+    document.getElementById('coverPreview').style.display = 'none';
+  }
+  if (p.attachment) {
+    document.getElementById('attachmentFileName').textContent = `Adjunto actual: ${p.attachment.name}`;
+    document.getElementById('clearAttachment').style.display = 'inline-block';
+  } else {
+    document.getElementById('attachmentFileName').textContent = 'Sin archivo';
+    document.getElementById('clearAttachment').style.display = 'none';
+  }
+  document.querySelector('.admin-tab[data-tab="new"]').click();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+async function deletePost(id) {
+  if (!confirm('¿Borrar esta publicación de manera permanente?')) return;
+  posts = posts.filter(p => p.id !== id);
+  await savePosts();
+  renderFeed();
+  renderAdminList();
+  showToast('Publicación eliminada');
+}
+
+function resetForm() {
+  document.getElementById('formMode').textContent = 'Nueva publicación';
+  document.getElementById('postId').value = '';
+  document.getElementById('postTitle').value = '';
+  document.getElementById('postTag').value = 'Equipo';
+  document.getElementById('postContent').value = '';
+  document.getElementById('postCover').value = '';
+  document.getElementById('postAttachment').value = '';
+  document.getElementById('coverFileName').textContent = 'Sin imagen seleccionada';
+  document.getElementById('attachmentFileName').textContent = 'Sin archivo';
+  document.getElementById('coverPreview').style.display = 'none';
+  document.getElementById('clearAttachment').style.display = 'none';
+  coverDataURL = null;
+  attachmentData = null;
+}
+
+// =============== BRAND SECTION ====================
+const BRAND_DATA = {
+  speedbolt: {
+    name: 'SPEED BOLT',
+    color: '#e37903',
+    info: 'Speed Bolt es la escudería de ingeniería del Instituto Politécnico Industrial de Santiago (IPISA), compitiendo en STEM Racing RD 2026. Diseñamos y construimos un monoplaza a escala con tecnología real, representando a Santiago en la competencia nacional.',
+    url: null
+  },
+  ipisa: {
+    name: 'IPISA',
+    color: '#003087',
+    info: 'El Instituto Politécnico Industrial de Santiago es la institución educativa que respalda y alberga al equipo Speed Bolt. Comprometida con la formación técnica y la innovación, IPISA impulsa proyectos de ingeniería aplicada como Speed Bolt para preparar a sus estudiantes para los retos del mundo real.',
+    url: 'https://www.ipisa.edu.do'
+  },
+  stemracing: {
+    name: 'STEM RACING DR',
+    color: '#7B2FBE',
+    info: 'STEM Racing RD es la competencia nacional de ingeniería estudiantil de República Dominicana, donde equipos de distintas instituciones diseñan, construyen y compiten con carros monoplaza a escala. Inspirada en la Fórmula 1, fusiona ciencia, tecnología, ingeniería y matemáticas en un desafío completamente práctico.',
+    url: 'https://www.stemracingrd.com'
+  }
+};
+
+let activeBrandKey = null;
+
+document.querySelectorAll('.brand-card').forEach(card => {
+  card.addEventListener('click', () => {
+    const brand = card.dataset.brand;
+    const panel = document.getElementById('brandPanel');
+    const inner = document.getElementById('brandPanelInner');
+
+    if (activeBrandKey === brand) {
+      activeBrandKey = null;
+      card.classList.remove('active');
+      card.querySelector('.brand-card-arrow').textContent = '▼';
+      panel.classList.remove('open');
+      return;
+    }
+
+    document.querySelectorAll('.brand-card').forEach(c => {
+      c.classList.remove('active');
+      c.querySelector('.brand-card-arrow').textContent = '▼';
+    });
+
+    activeBrandKey = brand;
+    card.classList.add('active');
+    card.querySelector('.brand-card-arrow').textContent = '▲';
+
+    const d = BRAND_DATA[brand];
+    inner.innerHTML = `
+      <div class="brand-panel-top">
+        <div class="brand-panel-accent" style="background: ${d.color};"></div>
+        <span class="brand-panel-name" style="color: ${d.color};">${escapeHtml(d.name)}</span>
+      </div>
+      <p class="brand-panel-text">${escapeHtml(d.info)}</p>
+      ${d.url ? `<a href="${d.url}" target="_blank" rel="noopener noreferrer" class="brand-panel-link" style="color: ${d.color}; border-color: ${d.color}55;">Sitio web →</a>` : ''}
+    `;
+    panel.classList.add('open');
+  });
+});
+
+// =============== INIT ====================
+loadPosts();
+</script>
+</body>
+</html>
