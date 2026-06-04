@@ -1579,13 +1579,22 @@ section {
 .tier-principal { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 .tier-oficial { grid-template-columns: repeat(6, minmax(0, 1fr)); }
 .tier-aliados { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 720px; margin: 0 auto; }
+.tier-platinum { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 760px; margin: 0 auto; }
+.tier-gold { grid-template-columns: minmax(0, 1fr); max-width: 520px; margin: 0 auto; }
+.tier-silver { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.tier-collab { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 920px; margin: 0 auto; }
 @media (max-width: 1024px) {
   .tier-principal { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .tier-oficial { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .tier-silver,
+  .tier-collab { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 600px) {
   .tier-principal,
-  .tier-oficial { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tier-oficial,
+  .tier-platinum,
+  .tier-silver,
+  .tier-collab { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .tier-aliados { grid-template-columns: 1fr; }
 }
 
@@ -1620,6 +1629,18 @@ section {
   display: inline-block;
   white-space: nowrap;
 }
+.partner-logo-img {
+  width: min(100%, 180px);
+  max-height: 72px;
+  object-fit: contain;
+  display: block;
+  filter: contrast(1.04) drop-shadow(0 10px 22px rgba(0,0,0,0.32));
+  transition: transform 0.35s var(--ease-out-expo), filter 0.35s var(--ease-out-expo);
+}
+.partner-logo:hover .partner-logo-img {
+  transform: scale(1.04);
+  filter: contrast(1.08) drop-shadow(0 12px 28px rgba(227,121,3,0.18));
+}
 .partner-logo.mega {
   min-height: 200px;
   border-color: var(--orange);
@@ -1637,14 +1658,19 @@ section {
   background: rgba(227,121,3,0.1);
   transform: translateY(-3px);
 }
+.partner-logo.mega .partner-logo-img {
+  width: min(100%, 240px);
+  max-height: 140px;
+}
 .partner-ipisa-img {
   width: clamp(120px, 14vw, 170px);
   height: auto;
   display: block;
   filter: drop-shadow(0 8px 22px rgba(0,0,0,0.4));
 }
-.partner-logo.small { min-height: 60px; }
+.partner-logo.small { min-height: 92px; padding: 16px 18px; }
 .partner-logo.small .plogo { font-size: 14px; }
+.partner-logo.small .partner-logo-img { max-height: 58px; width: min(100%, 150px); }
 
 /* Variaciones por marca para que cada logo no se vea idéntico */
 .plogo-ipisa { font-family: var(--font-display); }
@@ -3505,71 +3531,73 @@ footer {
   </div>
 
   <div class="partners-wall">
-    <!-- Title partner -->
+    <!-- Categoria Platino -->
     <div class="partners-tier-block reveal">
-      <div class="partners-tier tier-title">
-        <button class="partner-logo mega" data-cursor="hover" data-partner="ipisa">
-          <img class="partner-ipisa-img" src="assets/ipisa-logo.png" alt="IPISA - Instituto Politécnico Industrial Salesianos Santiago">
+      <div class="partners-tier-divider">
+        <span class="line"></span>
+        <span class="lbl">Categoria Platino</span>
+        <span class="line"></span>
+      </div>
+      <div class="partners-tier tier-platinum">
+        <button class="partner-logo mega" data-cursor="hover" data-partner="dpaulino">
+          <img class="partner-logo-img" src="assets/sponsors/dpaulino-chacabanas.jpg" alt="D' Paulino Chacabanas">
+        </button>
+        <button class="partner-logo mega" data-cursor="hover" data-partner="coleind">
+          <img class="partner-logo-img" src="assets/sponsors/cole-ind.jpg" alt="COLE IND">
         </button>
       </div>
     </div>
 
-    <!-- Principales -->
+    <!-- Categoria Oro -->
     <div class="partners-tier-block reveal">
-      <div class="partners-tier tier-principal">
-        <button class="partner-logo" data-cursor="hover" data-partner="banreservas">
-          <span class="plogo plogo-banreservas">BANRESERVAS</span>
-        </button>
-        <button class="partner-logo" data-cursor="hover" data-partner="popular">
-          <span class="plogo plogo-popular">BANCO POPULAR</span>
-        </button>
-        <button class="partner-logo" data-cursor="hover" data-partner="brugal">
-          <span class="plogo plogo-brugal">BRUGAL</span>
-        </button>
-        <button class="partner-logo" data-cursor="hover" data-partner="claro">
-          <span class="plogo plogo-claro">CLARO</span>
-        </button>
-        <button class="partner-logo" data-cursor="hover" data-partner="presidente">
-          <span class="plogo plogo-presidente">PRESIDENTE</span>
+      <div class="partners-tier-divider">
+        <span class="line"></span>
+        <span class="lbl">Categoria Oro</span>
+        <span class="line"></span>
+      </div>
+      <div class="partners-tier tier-gold">
+        <button class="partner-logo mega" data-cursor="hover" data-partner="ipisaSponsor">
+          <img class="partner-logo-img" src="assets/sponsors/ipisa-sponsor.jpg" alt="Instituto Politecnico Industrial de Santiago">
         </button>
       </div>
     </div>
 
-    <!-- Oficiales -->
+    <!-- Categoria Plata -->
     <div class="partners-tier-block reveal">
-      <div class="partners-tier tier-oficial">
-        <button class="partner-logo" data-cursor="hover" data-partner="baldom">
-          <span class="plogo">BALDOM</span>
+      <div class="partners-tier-divider">
+        <span class="line"></span>
+        <span class="lbl">Categoria Plata</span>
+        <span class="line"></span>
+      </div>
+      <div class="partners-tier tier-silver">
+        <button class="partner-logo" data-cursor="hover" data-partner="yamasa">
+          <img class="partner-logo-img" src="assets/sponsors/yamasa.jpg" alt="Taller de Muelles Yamasa">
         </button>
-        <button class="partner-logo" data-cursor="hover" data-partner="bonao">
-          <span class="plogo">INDUBAN</span>
+        <button class="partner-logo" data-cursor="hover" data-partner="nautae">
+          <img class="partner-logo-img" src="assets/sponsors/nautae.jpg" alt="Nautae">
         </button>
-        <button class="partner-logo" data-cursor="hover" data-partner="cocacola">
-          <span class="plogo">REFRESCAS</span>
-        </button>
-        <button class="partner-logo" data-cursor="hover" data-partner="cnp">
-          <span class="plogo">CNP RD</span>
-        </button>
-        <button class="partner-logo" data-cursor="hover" data-partner="orange">
-          <span class="plogo">ORANGE</span>
-        </button>
-        <button class="partner-logo" data-cursor="hover" data-partner="autozona">
-          <span class="plogo">AUTOZONA</span>
+        <button class="partner-logo" data-cursor="hover" data-partner="naroh">
+          <img class="partner-logo-img" src="assets/sponsors/naroh.jpg" alt="Naroh">
         </button>
       </div>
     </div>
 
-    <!-- Aliados -->
+    <!-- Colaboracion -->
     <div class="partners-tier-block reveal">
-      <div class="partners-tier tier-aliados">
-        <button class="partner-logo small" data-cursor="hover" data-partner="cesur">
-          <span class="plogo">CESUR</span>
+      <div class="partners-tier-divider">
+        <span class="line"></span>
+        <span class="lbl">Colaboracion</span>
+        <span class="line"></span>
+      </div>
+      <div class="partners-tier tier-collab">
+        <button class="partner-logo small" data-cursor="hover" data-partner="serarte">
+          <img class="partner-logo-img" src="assets/sponsors/serarte.png" alt="Serarte">
         </button>
-        <button class="partner-logo small" data-cursor="hover" data-partner="cuesta">
-          <span class="plogo">CUESTA TECH</span>
+        <button class="partner-logo small" data-cursor="hover" data-partner="lgu">
+          <img class="partner-logo-img" src="assets/sponsors/lgu.jpg" alt="LGU">
         </button>
-        <button class="partner-logo small" data-cursor="hover" data-partner="cap">
-          <span class="plogo">CAP CANA</span>
+        <button class="partner-logo small" data-cursor="hover" data-partner="donbosco">
+          <img class="partner-logo-img" src="assets/sponsors/don-bosco.png" alt="Don Bosco">
         </button>
       </div>
     </div>
@@ -3783,6 +3811,60 @@ footer {
 
 // =============== DATA ====================
 const PARTNERS = {
+  dpaulino: {
+    name: "D' Paulino Chacabanas",
+    tier: 'Categoria Platino',
+    desc: 'Patrocinador platino de Speed Bolt. Su apoyo fortalece la identidad, la presencia publica y la ejecucion del equipo durante la temporada STEM Racing.',
+    url: ''
+  },
+  coleind: {
+    name: 'COLE IND',
+    tier: 'Categoria Platino',
+    desc: 'Patrocinador platino de Speed Bolt. Aporta respaldo clave para que el proyecto avance con mayor alcance, preparacion y visibilidad competitiva.',
+    url: ''
+  },
+  ipisaSponsor: {
+    name: 'Instituto Politecnico Industrial de Santiago',
+    tier: 'Categoria Oro',
+    desc: 'Patrocinador oro y base academica del equipo. Su respaldo impulsa el talento tecnico que representa a Santiago en STEM Racing.',
+    url: ''
+  },
+  yamasa: {
+    name: 'Taller de Muelles Yamasa',
+    tier: 'Categoria Plata',
+    desc: 'Patrocinador plata de Speed Bolt. Su colaboracion acompana el desarrollo tecnico y operativo del equipo.',
+    url: ''
+  },
+  nautae: {
+    name: 'Nautae',
+    tier: 'Categoria Plata',
+    desc: 'Patrocinador plata de Speed Bolt. Su apoyo suma recursos y presencia para la temporada competitiva.',
+    url: ''
+  },
+  naroh: {
+    name: 'Naroh',
+    tier: 'Categoria Plata',
+    desc: 'Patrocinador plata de Speed Bolt. Acompana al equipo en su camino de innovacion, disciplina y representacion estudiantil.',
+    url: ''
+  },
+  serarte: {
+    name: 'Serarte',
+    tier: 'Colaboracion',
+    desc: 'Colaborador de Speed Bolt. Su aporte ayuda a completar la red de aliados que hace posible el proyecto.',
+    url: ''
+  },
+  lgu: {
+    name: 'LGU',
+    tier: 'Colaboracion',
+    desc: 'Colaborador de Speed Bolt. Su apoyo suma al crecimiento del equipo y a la construccion de una temporada mas solida.',
+    url: ''
+  },
+  donbosco: {
+    name: 'Don Bosco',
+    tier: 'Colaboracion',
+    desc: 'Colaborador de Speed Bolt. Forma parte de la comunidad que impulsa la formacion tecnica, la disciplina y el trabajo en equipo.',
+    url: ''
+  },
   baldom: {
     name: 'Baldom',
     tier: 'Patrocinador',
@@ -4202,8 +4284,15 @@ function openPartnerModal(data) {
   document.getElementById('partnerModalName').textContent = data.name;
   document.getElementById('partnerModalTier').textContent = data.tier;
   document.getElementById('partnerModalDesc').textContent = data.desc;
-  document.getElementById('partnerModalLink').href = data.url;
-  document.getElementById('partnerModalLinkText').textContent = data.linkLabel || 'Visitar sitio oficial';
+  const partnerLink = document.getElementById('partnerModalLink');
+  if (data.url) {
+    partnerLink.href = data.url;
+    partnerLink.style.display = 'inline-flex';
+    document.getElementById('partnerModalLinkText').textContent = data.linkLabel || 'Visitar sitio oficial';
+  } else {
+    partnerLink.removeAttribute('href');
+    partnerLink.style.display = 'none';
+  }
   partnerModal.classList.add('open');
   document.body.style.overflow = 'hidden';
 }
